@@ -1,0 +1,35 @@
+# Thư mục và tệp được tạo bởi Visual Studio
+.vscode/
+.vs/
+bin/
+obj/
+properties/
+
+# Các tệp build và log
+*.dll
+*.pdb
+*.exe
+*.zip
+*.7z
+*.nupkg
+*.ncrunch*
+*.suo
+*.user
+*.bak
+*.log
+*.vscode
+*.sln.docstates
+_project.lock.json
+_project.fragment.lock.json
+
+# Tệp tạo ra bởi Rider IDE
+.idea/
+
+# Thư mục user của Visual Studio Code
+.vscode/
+
+# Thư mục nuget
+packages/
+
+# Các tệp tạo ra bởi Rider IDE
+.idea/
