@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PfpfFGE8tqWWU58SSZnijxricECLuVwKVO1+VouaR9rOZvzPBdtq1FMJpXXnThQkKFURjRYQBk6T5mP4qEPNxQ==",
+  "dgSpecHash": "8fB9KH48dg92sbg9Fn7Oeo9xcBuyRfbqze4vZfDUwx2G5p2S3XjYF8G6qBjiNv6kT5fznft8NUR/qlSLQOrswQ==",
   "success": true,
-  "projectFilePath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
+  "projectFilePath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lydai\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\lydai\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

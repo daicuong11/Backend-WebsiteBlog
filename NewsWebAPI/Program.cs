@@ -18,6 +18,11 @@ builder.Services.AddDbContext<MyDbContext>(x =>
     x.UseSqlServer(connectionString);
 });
 
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+{
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 //Đăng ký repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -29,6 +34,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("corspolicy");
+
+
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

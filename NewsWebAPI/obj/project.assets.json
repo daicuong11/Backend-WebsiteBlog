@@ -2444,11 +2444,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
+      "projectUniqueName": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
       "projectName": "NewsWebAPI",
-      "projectPath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
+      "projectPath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
       "packagesPath": "C:\\Users\\lydai\\.nuget\\packages\\",
-      "outputPath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\ProjectFinalDotNet\\NewsWebAPI\\obj\\",
+      "outputPath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\lydai\\AppData\\Roaming\\NuGet\\NuGet.Config",
