@@ -9,5 +9,8 @@ namespace NewsWebAPI.Data
         public MyDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Article> Articles { get; set; }
     }
 }

@@ -14,7 +14,9 @@ namespace NewsWebAPI.Entities
         public int Id { get; set; }
 
         [Column("name")]
-        [MaxLength(100)]
+        [Required(ErrorMessage = "Họ và tên là trường bắt buộc.")]
+        [MaxLength(100, ErrorMessage = "Tên không được vượt quá 100 ký tự.")]
+        [MinLength(2, ErrorMessage = "Tên phải có ít nhất 2 ký tự.")]
         public string Name { get; set; }
 
         [Column("username")]
@@ -30,6 +32,10 @@ namespace NewsWebAPI.Entities
         public string Password { get; set; }
         [Column("role")]
         public string Role { get; set; }
+
+        //Khóa ngoại
+        public List<Like>? Likes { get; set; }
+        public List<Comment>? Comments { get; set; }
 
     }
 }
