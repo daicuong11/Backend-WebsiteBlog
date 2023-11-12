@@ -16,6 +16,7 @@ namespace NewsWebAPI.Repositorys
         Task<Article> CreateArticle(Article article);
         Task UpdateArticle(Article article);
         Task DeleteArticle(Article article);
+
     }
 
 }

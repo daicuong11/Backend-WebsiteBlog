@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231112070333_initArticle_Like_Comment")]
-    partial class initArticle_Like_Comment
+    [Migration("20231112122052_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,164 +26,166 @@ namespace NewsWebAPI.Migrations
 
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
-                    b.Property<int>("ArticleId")
+                    b.Property<int>("ArticleID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("article_id");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleID"), 1L, 1);
+
+                    b.Property<string>("ArticleContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("category");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("title");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
                     b.Property<int?>("View")
-                        .HasColumnType("int")
-                        .HasColumnName("view");
+                        .HasColumnType("int");
 
-                    b.Property<string>("content")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("content");
+                    b.HasKey("ArticleID");
 
-                    b.Property<DateTime>("publishDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("publish_date");
-
-                    b.HasKey("ArticleId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
                 {
-                    b.Property<int>("CommentId")
+                    b.Property<int>("CommentID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("comment_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"), 1L, 1);
-
-                    b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Content")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"), 1L, 1);
+
+                    b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CommentContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("content");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("create_at");
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int?>("ParentCommentID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ParentCommentId")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.HasKey("CommentID");
 
-                    b.HasKey("CommentId");
+                    b.HasIndex("ArticleID");
 
-                    b.HasIndex("ArticleId");
+                    b.HasIndex("ParentCommentID");
 
-                    b.HasIndex("ParentCommentId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.Like", b =>
                 {
-                    b.Property<int>("likeId")
+                    b.Property<int>("likeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("like_id");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("likeId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("likeID"), 1L, 1);
 
-                    b.Property<int>("ArticleId")
+                    b.Property<int>("ArticleID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("create_at");
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.HasKey("likeID");
 
-                    b.HasKey("likeId");
+                    b.HasIndex("ArticleID");
 
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("name");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("password");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("role");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("username");
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserID");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.User", "User")
+                        .WithMany("Articles")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
                         .WithMany("Comments")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ArticleID")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("NewsWebAPI.Entities.Comment", "ParentComment")
                         .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId");
+                        .HasForeignKey("ParentCommentID");
 
                     b.HasOne("NewsWebAPI.Entities.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Article");
 
@@ -196,13 +198,15 @@ namespace NewsWebAPI.Migrations
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
                         .WithMany("Likes")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ArticleID")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("NewsWebAPI.Entities.User", "User")
                         .WithMany("Likes")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Article");
 
@@ -223,6 +227,8 @@ namespace NewsWebAPI.Migrations
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
+                    b.Navigation("Articles");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");

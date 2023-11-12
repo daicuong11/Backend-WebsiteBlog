@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NewsWebAPI.Entities
 {
@@ -7,16 +8,17 @@ namespace NewsWebAPI.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("like_id")]
-        public int likeId { get; set; }
-        [Column("create_at")]
+        public int likeID { get; set; }
         public DateTime CreateAt { get; set; }
 
         //khóa ngoại
-        public int ArticleId { get; set; }
+        [Required(ErrorMessage = "Mã bài viết là trường bắt buộc.")]
+        public int ArticleID { get; set; }
+        [JsonIgnore]
         public Article? Article { get; set; }
-
-        public int Id { get; set; }
+        [Required(ErrorMessage = "Mã tác giả là trường bắt buộc.")]
+        public int UserID { get; set; }
+        [JsonIgnore]
         public User? User { get; set; }
     }
 }

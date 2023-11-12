@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NewsWebAPI.Entities
 {
@@ -7,21 +8,22 @@ namespace NewsWebAPI.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("comment_id")]
-        public int CommentId { get; set; }
-        [Column("content")]
+        public int CommentID { get; set; }
+
         [Required(ErrorMessage = "Nội dung là trường bắt buộc.")]
-        public string Content { get; set; }
-        [Column("create_at")]
+        public string CommentContent { get; set; }
         public DateTime CreatedAt { get; set; }
         //Khóa ngoại
-        public int? ParentCommentId { get; set; }
-        public Comment? ParentComment { get; set; }
-        public int ArticleId { get; set; }
+        public int UserID { get; set; }
+        [JsonIgnore]
+        public User? User { get; set; }
+        public int ArticleID { get; set; }
+        [JsonIgnore]
         public Article? Article { get; set; }
 
-        public int Id { get; set; }
-        public User? User { get; set; }
+        public int? ParentCommentID { get; set; }
+        public Comment? ParentComment { get; set; }
+        [JsonIgnore]
         public List<Comment>? Replies { get; set; }
     }
 }

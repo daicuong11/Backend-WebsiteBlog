@@ -13,10 +13,14 @@ namespace NewsWebAPI.Controllers
     [ApiController]
     public class ArticleController : ControllerBase
     {
+        private readonly IUserRepository _userRepository;
         private readonly IArticleRepository _articleRepository;
-        public ArticleController(IArticleRepository articleRepository)
+
+        [ActivatorUtilitiesConstructor]
+        public ArticleController(IArticleRepository articleRepository, IUserRepository userRepository)
         {
             _articleRepository = articleRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet] 
@@ -63,7 +67,13 @@ namespace NewsWebAPI.Controllers
         {
             try
             {
-                article.publishDate = DateTime.Now;
+                User findUserById = await _userRepository.GetById(article.UserID);
+                if(findUserById == null)
+                {
+                    var res = new MyResponse<Article>(false, "Không tim thấy tác giả với id = " + article.UserID, null);
+                    return NotFound(res);
+                }
+                article.PublishDate = DateTime.Now;
                 //Xữ lý khi user truyền vào thiếu thông tin (validate form)
                 if (!ModelState.IsValid)
                 {
@@ -99,10 +109,6 @@ namespace NewsWebAPI.Controllers
                 {
                     throw new ValidatorExeption("Tiêu đề không được để trống");
                 }
-                else if (String.IsNullOrEmpty(article.content.Trim()))
-                {
-                    throw new ValidatorExeption("Nội dung không được để trống");
-                }
                 Article findArticleById = await _articleRepository.GetArticleById(id);
                 if(findArticleById == null)
                 {
@@ -112,7 +118,7 @@ namespace NewsWebAPI.Controllers
                 else
                 {
                     findArticleById.Title = article.Title;
-                    findArticleById.content = article.content;
+                    findArticleById.ArticleContent = article.ArticleContent;
 
                     await _articleRepository.UpdateArticle(findArticleById);
                     var response = new MyResponse<string>(true, "Cập nhật thành công", null);
@@ -150,5 +156,31 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("likes/{id}")]
+        public async Task<IActionResult> GetLikeOfArticle([FromRoute] int id)
+        {
+            try
+            {
+                Article findArticleById = await _articleRepository.GetArticleById(id);
+                if(findArticleById == null)
+                {
+                    var response = new MyResponse<Article>(false, "Không tìm thấy bài viết nào với id = " + id, null);
+                    return NotFound(response);
+                }
+                else
+                {
+                    List<Like> likes = await _articleRepository.GetLikesForArticle(id);
+                    var response = new MyResponse<List<Like>>(true, "Danh sách lượi thích", likes);
+                    return Ok(response);
+                }
+            }
+            catch(Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
     }
 }

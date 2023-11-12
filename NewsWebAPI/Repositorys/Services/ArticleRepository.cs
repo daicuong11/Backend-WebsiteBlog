@@ -37,14 +37,14 @@ namespace NewsWebAPI.Repositorys.Services
 
         public async Task<List<Like>> GetLikesForArticle(int articleId)
         {
-            return await _context.Likes.Where(l => l.ArticleId == articleId).ToListAsync();
+            return await _context.Likes.Where(l => l.ArticleID == articleId).ToListAsync();
         }
 
         public async Task<List<Comment>> GetCommentsForArticle(int articleId)
         {
             return await _context.Comments
                 .Include(c => c.Replies)
-                .Where(c => c.ArticleId == articleId && c.ParentCommentId == null)
+                .Where(c => c.ArticleID == articleId)
                 .ToListAsync();
         }
 
