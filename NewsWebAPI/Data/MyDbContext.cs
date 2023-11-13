@@ -13,7 +13,9 @@ namespace NewsWebAPI.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Image> Images { get; set; }
 
+        public DbSet<ImageArticleMapping> ImageArticleMappings {  get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

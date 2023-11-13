@@ -34,6 +34,7 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 var app = builder.Build();
 
