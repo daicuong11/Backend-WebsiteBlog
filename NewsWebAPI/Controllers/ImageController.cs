@@ -6,7 +6,11 @@ using NewsWebAPI.Enums;
 using NewsWebAPI.MyExeption;
 using NewsWebAPI.Repositorys;
 using NewsWebAPI.Repositorys.Services;
+using Newtonsoft.Json;
+using System;
 using System.Globalization;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 namespace NewsWebAPI.Controllers
 {
@@ -16,12 +20,14 @@ namespace NewsWebAPI.Controllers
     {
         public readonly IArticleRepository _articleRepository;
         public readonly IImageRepository _imageRepository;
+        public static IWebHostEnvironment _environment;
 
         [ActivatorUtilitiesConstructor]
-        public ImageController(IArticleRepository articleRepository, IImageRepository imageRepository)
+        public ImageController(IArticleRepository articleRepository, IImageRepository imageRepository, IWebHostEnvironment environment)
         {
             _articleRepository = articleRepository;
             _imageRepository = imageRepository;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -140,6 +146,46 @@ namespace NewsWebAPI.Controllers
             {
                 return BadRequest(new MyResponse<string>(false, "Lỗi khi xóa hình ảnh", ex.Message));
             }
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> PostImage(IFormFile fileimage)
+        {
+            //var img = JsonConvert.DeserializeObject<string>(datajson);
+            try
+            {
+                var uploads = Path.Combine(_environment.WebRootPath, "Upload");
+
+                var filePath = Path.Combine(uploads, fileimage.FileName);
+
+                if (fileimage.Length > 0)
+                {
+                    if (!Directory.Exists(_environment.WebRootPath + "\\Upload"))
+                    {
+                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
+                    }
+
+                    using (FileStream filestream = System.IO.File.Create( filePath))
+                    {
+                        await fileimage.CopyToAsync(filestream);
+                    }
+                }
+
+                return Ok(new MyResponse<string>(true, "Lưu thành công", this.GetBaseUrl() + "/Upload/" + fileimage.FileName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new MyResponse<string>(false, "Lỗi xử lý ảnh", ex.Message));
+
+            }
+        }
+
+        private string GetBaseUrl()
+        {
+            var request = this.Request;
+            var host = request.Host.ToUriComponent();
+            var pathBase = request.PathBase.ToUriComponent();
+
+            return $"{request.Scheme}://{host}{pathBase}";
         }
     }
 }
