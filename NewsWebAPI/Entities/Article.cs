@@ -18,7 +18,6 @@ namespace NewsWebAPI.Entities
 
         public DateTime PublishDate { get; set; }
         public int? View { get; set; }
-        public string? Category { get; set; }
         //Khóa ngoại
         public int UserID { get; set; }
         [JsonIgnore]
@@ -28,6 +27,9 @@ namespace NewsWebAPI.Entities
         [JsonIgnore]
         public List<Comment>? Comments { get; set; }
 
+        public int CategoryID { get; set; }
+        [JsonIgnore]
+        public Category Category { get; set; }
 
     }
 }
