@@ -30,13 +30,13 @@ namespace NewsWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleID"), 1L, 1);
 
-                    b.Property<string>("ArticleContent")
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
+                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PublishDate")
@@ -58,9 +58,28 @@ namespace NewsWebAPI.Migrations
 
                     b.HasKey("ArticleID");
 
+                    b.HasIndex("CategoryID");
+
                     b.HasIndex("UserID");
 
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"), 1L, 1);
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
@@ -96,6 +115,78 @@ namespace NewsWebAPI.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Content", b =>
+                {
+                    b.Property<int>("ContentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContentID"), 1L, 1);
+
+                    b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentBody")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ContentID");
+
+                    b.HasIndex("ArticleID")
+                        .IsUnique();
+
+                    b.ToTable("Contents");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Image", b =>
+                {
+                    b.Property<int>("ImageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"), 1L, 1);
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageID");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.ImageArticleMapping", b =>
+                {
+                    b.Property<int>("ImageArticleMappingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageArticleMappingID"), 1L, 1);
+
+                    b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ImageID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageArticleMappingID");
+
+                    b.HasIndex("ArticleID");
+
+                    b.HasIndex("ImageID");
+
+                    b.ToTable("ImageArticleMappings");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.Like", b =>
@@ -158,11 +249,19 @@ namespace NewsWebAPI.Migrations
 
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
+                    b.HasOne("NewsWebAPI.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NewsWebAPI.Entities.User", "User")
                         .WithMany("Articles")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -192,6 +291,36 @@ namespace NewsWebAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NewsWebAPI.Entities.Content", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
+                        .WithOne("Content")
+                        .HasForeignKey("NewsWebAPI.Entities.Content", "ArticleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.ImageArticleMapping", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NewsWebAPI.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("NewsWebAPI.Entities.Like", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
@@ -214,6 +343,9 @@ namespace NewsWebAPI.Migrations
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Content")
+                        .IsRequired();
 
                     b.Navigation("Likes");
                 });

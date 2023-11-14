@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Data;
 using NewsWebAPI.Entities;
-using NewsWebAPI.Migrations;
 using System.ComponentModel.Design;
 
 namespace NewsWebAPI.Repositorys.Services

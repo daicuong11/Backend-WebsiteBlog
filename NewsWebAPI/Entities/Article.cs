@@ -12,8 +12,10 @@ namespace NewsWebAPI.Entities
         public int ArticleID { get; set; }
         [Required(ErrorMessage = "Tiêu đề là trường bắt buộc.")]
         public string Title { get; set; }
-        public string? ArticleContent { get; set; }
-        public string? Image {  get; set; }
+        public string? Description { get; set; }
+        [NotMapped]
+        public IFormFile Image {  get; set; }
+        public string? ImagePath {  get; set; }
         public string Status { get; set; }
 
         public DateTime PublishDate { get; set; }
@@ -30,6 +32,9 @@ namespace NewsWebAPI.Entities
         public int CategoryID { get; set; }
         [JsonIgnore]
         public Category Category { get; set; }
+
+        [JsonIgnore]
+        public Content Content { get; set; }
 
     }
 }

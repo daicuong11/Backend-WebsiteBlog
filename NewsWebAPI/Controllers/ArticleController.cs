@@ -61,20 +61,37 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-
         [HttpPost]
-        public async Task<IActionResult> CreateArticle([FromBody] Article article)
+        public async Task<IActionResult> CreateArticle([FromForm] Article article)
         {
             try
             {
                 User findUserById = await _userRepository.GetById(article.UserID);
-                if(findUserById == null)
+                if (findUserById == null)
                 {
                     var res = new MyResponse<Article>(false, "Không tim thấy tác giả với id = " + article.UserID, null);
                     return NotFound(res);
                 }
+
                 article.PublishDate = DateTime.Now;
-                //Xữ lý khi user truyền vào thiếu thông tin (validate form)
+
+                // Kiểm tra và xử lý upload ảnh
+                if (article.Image != null && article.Image.Length > 0)
+                {
+                    // Tạo đường dẫn và lưu ảnh vào thư mục
+                    var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
+                    var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
+
+                    using (var stream = new FileStream(physicalPath, FileMode.Create))
+                    {
+                        await article.Image.CopyToAsync(stream);
+                    }
+
+                    // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
+                    article.ImagePath = imagePath;
+                }
+
+                // Xữ lý khi user truyền vào thiếu thông tin (validate form)
                 if (!ModelState.IsValid)
                 {
                     var fError = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault();
@@ -99,6 +116,44 @@ namespace NewsWebAPI.Controllers
             }
         }
 
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateArticle([FromBody] Article article)
+        //{
+        //    try
+        //    {
+        //        User findUserById = await _userRepository.GetById(article.UserID);
+        //        if(findUserById == null)
+        //        {
+        //            var res = new MyResponse<Article>(false, "Không tim thấy tác giả với id = " + article.UserID, null);
+        //            return NotFound(res);
+        //        }
+        //        article.PublishDate = DateTime.Now;
+        //        //Xữ lý khi user truyền vào thiếu thông tin (validate form)
+        //        if (!ModelState.IsValid)
+        //        {
+        //            var fError = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault();
+        //            if (fError != null)
+        //            {
+        //                var error = fError.ErrorMessage;
+        //                if (String.IsNullOrEmpty(error))
+        //                {
+        //                    throw new ValidatorExeption(error);
+        //                }
+        //            }
+        //        }
+
+        //        Article newArticle = await _articleRepository.CreateArticle(article);
+        //        var response = new MyResponse<Article>(true, "Thêm thành công", newArticle);
+        //        return StatusCode(201, response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+        //        return BadRequest(response);
+        //    }
+        //}
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Article article)
         {
@@ -117,8 +172,23 @@ namespace NewsWebAPI.Controllers
                 }
                 else
                 {
+                    if (article.Image != null && article.Image.Length > 0)
+                    {
+                        // Tạo đường dẫn và lưu ảnh vào thư mục
+                        var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
+                        var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
+
+                        using (var stream = new FileStream(physicalPath, FileMode.Create))
+                        {
+                            await article.Image.CopyToAsync(stream);
+                        }
+
+                        // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
+                        article.ImagePath = imagePath;
+                    }
                     findArticleById.Title = article.Title;
-                    findArticleById.ArticleContent = article.ArticleContent;
+                    findArticleById.Description = article.Description;
+                    findArticleById.ImagePath = article.ImagePath;
 
                     await _articleRepository.UpdateArticle(findArticleById);
                     var response = new MyResponse<string>(true, "Cập nhật thành công", null);
@@ -181,6 +251,23 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        //[HttpGet("images/{imageName}")]
+        //public IActionResult GetImage(string imageName)
+        //{
+        //    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img", imageName);
+        //    // Kiểm tra xem ảnh có tồn tại không
+        //    if (System.IO.File.Exists(imagePath))
+        //    {
+        //        // Đọc dữ liệu từ tệp và trả về nó dưới dạng nội dung đáp ứng
+        //        var imageFileStream = System.IO.File.OpenRead(imagePath);
+        //        return File(imageFileStream, "image/jpeg"); // Thay đổi loại MIME tùy thuộc vào loại ảnh bạn đang sử dụng
+        //    }
+
+        //    // Trả về lỗi nếu ảnh không tồn tại
+        //    var response = new MyResponse<string>(false, "Không tìm thấy ảnh với tên " + imageName, "");
+        //    return NotFound(response);
+        //}
 
     }
 }
