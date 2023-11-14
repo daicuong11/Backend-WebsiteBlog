@@ -23,7 +23,6 @@ namespace NewsWebAPI.Entities
 
         public int? ParentCommentID { get; set; }
         public Comment? ParentComment { get; set; }
-        [JsonIgnore]
         public List<Comment>? Replies { get; set; }
     }
 }
