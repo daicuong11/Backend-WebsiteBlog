@@ -78,6 +78,14 @@ namespace NewsWebAPI.Controllers
                 // Kiểm tra và xử lý upload ảnh
                 if (article.Image != null && article.Image.Length > 0)
                 {
+                    // Tạo đường dẫn thư mục
+                    var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img");
+
+                    // Kiểm tra nếu thư mục không tồn tại, tạo mới
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
                     // Tạo đường dẫn và lưu ảnh vào thư mục
                     var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
                     var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
@@ -155,7 +163,7 @@ namespace NewsWebAPI.Controllers
         //}
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Article article)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] Article article)
         {
             try
             {
@@ -174,6 +182,14 @@ namespace NewsWebAPI.Controllers
                 {
                     if (article.Image != null && article.Image.Length > 0)
                     {
+                        // Tạo đường dẫn thư mục
+                        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img");
+
+                        // Kiểm tra nếu thư mục không tồn tại, tạo mới
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
                         // Tạo đường dẫn và lưu ảnh vào thư mục
                         var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
                         var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);

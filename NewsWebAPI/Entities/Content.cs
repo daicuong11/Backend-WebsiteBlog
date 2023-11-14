@@ -20,6 +20,6 @@ namespace NewsWebAPI.Entities
         //khóa ngoại
         public int ArticleID { get; set; }
         [JsonIgnore]
-        public Article Article { get; set; }
+        public Article? Article { get; set; }
     }
 }

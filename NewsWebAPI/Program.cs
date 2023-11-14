@@ -30,6 +30,15 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+});
+
 //Đăng ký repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();

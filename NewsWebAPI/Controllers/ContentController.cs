@@ -5,6 +5,7 @@ using NewsWebAPI.Entities;
 using NewsWebAPI.MyExeption;
 using NewsWebAPI.Repositorys;
 using NewsWebAPI.Repositorys.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace NewsWebAPI.Controllers
 {
@@ -79,30 +80,40 @@ namespace NewsWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContent([FromBody] Content content)
+        public async Task<IActionResult> CreateContent([FromForm] Content content)
         {
             try
             {
                 Article findArticleById = await _articleRepository.GetArticleById(content.ArticleID);
                 if (findArticleById == null)
                 {
-                    var res = new MyResponse<Article>(false, "Không tim thấy tác giả với id = " + content.ArticleID, null);
+                    var res = new MyResponse<Article>(false, "Không tìm thấy bài viết với id = " + content.ArticleID, null);
                     return NotFound(res);
                 }
 
                 // Kiểm tra và xử lý upload ảnh
                 if (content.ContentImage != null && content.ContentImage.Length > 0)
                 {
-                    // Tạo đường dẫn và lưu ảnh vào thư mục
-                    var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName));
-                    var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
+                    // Tạo đường dẫn thư mục
+                    var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img");
+
+                    // Kiểm tra nếu thư mục không tồn tại, tạo mới
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    // Tạo đường dẫn và lưu ảnh vào thư mục với tên duy nhất
+                    var imageName = Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName);
+                    var imagePath = Path.Combine("resource", "img", imageName);
+                    var physicalPath = Path.Combine(directoryPath, imageName);
 
                     using (var stream = new FileStream(physicalPath, FileMode.Create))
                     {
                         await content.ContentImage.CopyToAsync(stream);
                     }
 
-                    // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
+                    // Lưu đường dẫn vào thuộc tính ContentImagePath của nội dung
                     content.ContentImagePath = imagePath;
                 }
 
@@ -115,11 +126,11 @@ namespace NewsWebAPI.Controllers
                         var error = fError.ErrorMessage;
                         if (String.IsNullOrEmpty(error))
                         {
-                            throw new ValidatorExeption(error);
+                            throw new ValidationException(error);
                         }
                     }
                 }
-                ///của con chat
+
                 Content newContent = await _contentRepository.CreateContent(content);
                 var response = new MyResponse<Content>(true, "Thêm nội dung thành công", newContent);
                 return StatusCode(201, response);
@@ -130,6 +141,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateContent([FromRoute] int id, [FromBody] Content content)
@@ -147,6 +159,14 @@ namespace NewsWebAPI.Controllers
                     // Kiểm tra và xử lý upload ảnh
                     if (content.ContentImage != null && content.ContentImage.Length > 0)
                     {
+                        // Tạo đường dẫn thư mục
+                        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img");
+
+                        // Kiểm tra nếu thư mục không tồn tại, tạo mới
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
                         // Tạo đường dẫn và lưu ảnh vào thư mục
                         var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName));
                         var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);

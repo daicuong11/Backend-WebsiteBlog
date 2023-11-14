@@ -31,10 +31,10 @@ namespace NewsWebAPI.Entities
 
         public int CategoryID { get; set; }
         [JsonIgnore]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         [JsonIgnore]
-        public Content Content { get; set; }
+        public List<Content>? Contents { get; set; }
 
     }
 }

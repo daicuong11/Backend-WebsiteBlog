@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsWebAPI.Data;
 
@@ -11,9 +12,10 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231114171435_initdb1")]
+    partial class initdb1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,8 @@ namespace NewsWebAPI.Migrations
 
                     b.HasKey("ContentID");
 
-                    b.HasIndex("ArticleID");
+                    b.HasIndex("ArticleID")
+                        .IsUnique();
 
                     b.ToTable("Contents");
                 });
@@ -293,8 +296,8 @@ namespace NewsWebAPI.Migrations
             modelBuilder.Entity("NewsWebAPI.Entities.Content", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithMany("Contents")
-                        .HasForeignKey("ArticleID")
+                        .WithOne("Content")
+                        .HasForeignKey("NewsWebAPI.Entities.Content", "ArticleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -343,7 +346,7 @@ namespace NewsWebAPI.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Contents");
+                    b.Navigation("Content");
 
                     b.Navigation("Likes");
                 });
