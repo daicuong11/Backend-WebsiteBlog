@@ -103,18 +103,18 @@ namespace NewsWebAPI.Controllers
                         Directory.CreateDirectory(directoryPath);
                     }
 
-                    // Tạo đường dẫn và lưu ảnh vào thư mục với tên duy nhất
+                    // Tạo đường dẫn và lưu ảnh vào thư mục
                     var imageName = Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName);
                     var imagePath = Path.Combine("resource", "img", imageName);
-                    var physicalPath = Path.Combine(directoryPath, imageName);
+                    var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
                     using (var stream = new FileStream(physicalPath, FileMode.Create))
                     {
                         await content.ContentImage.CopyToAsync(stream);
                     }
 
-                    // Lưu đường dẫn vào thuộc tính ContentImagePath của nội dung
-                    content.ContentImagePath = imagePath;
+                    // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
+                    content.ContentImagePath = imageName;
                 }
 
                 // Xữ lý khi truyền vào thiếu thông tin (validate form)
@@ -168,7 +168,8 @@ namespace NewsWebAPI.Controllers
                             Directory.CreateDirectory(directoryPath);
                         }
                         // Tạo đường dẫn và lưu ảnh vào thư mục
-                        var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName));
+                        var imageName = Guid.NewGuid().ToString() + Path.GetExtension(content.ContentImage.FileName);
+                        var imagePath = Path.Combine("resource", "img", imageName);
                         var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
                         using (var stream = new FileStream(physicalPath, FileMode.Create))
@@ -177,7 +178,7 @@ namespace NewsWebAPI.Controllers
                         }
 
                         // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
-                        content.ContentImagePath = imagePath;
+                        content.ContentImagePath = imageName;
                     }
                     findContentById.ContentTitle = content.ContentTitle;
                     findContentById.ContentBody = content.ContentBody;
@@ -219,22 +220,5 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-
-        //[HttpGet("images/{imageName}")]
-        //public IActionResult GetImage(string imageName)
-        //{
-        //    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img", imageName);
-        //    // Kiểm tra xem ảnh có tồn tại không
-        //    if (System.IO.File.Exists(imagePath))
-        //    {
-        //        // Đọc dữ liệu từ tệp và trả về nó dưới dạng nội dung đáp ứng
-        //        var imageFileStream = System.IO.File.OpenRead(imagePath);
-        //        return File(imageFileStream, "image/jpeg"); // Thay đổi loại MIME tùy thuộc vào loại ảnh bạn đang sử dụng
-        //    }
-
-        //    // Trả về lỗi nếu ảnh không tồn tại
-        //    var response = new MyResponse<string>(false, "Không tìm thấy ảnh với tên " + imageName, "");
-        //    return NotFound(response);
-        //}
     }
 }

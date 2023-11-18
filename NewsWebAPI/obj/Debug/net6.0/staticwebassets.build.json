@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3OHKlJ5kMmugS9g+emd04GkyXDDRaXSlM+rwLRP+HNY=",
+  "Hash": "hJB8ma7YTscwF/ATe30l6I4dweP1ZzrLxg/krY+AmAE=",
   "Source": "NewsWebAPI",
   "BasePath": "_content/NewsWebAPI",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\298da834-09a4-4875-b311-cbe9dc275630.png",
+      "SourceId": "NewsWebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\",
+      "BasePath": "_content/NewsWebAPI",
+      "RelativePath": "resource/img/298da834-09a4-4875-b311-cbe9dc275630.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\resource\\img\\298da834-09a4-4875-b311-cbe9dc275630.png"
+    },
     {
       "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\3c682240-de91-4601-bd2b-0769c33c640e.png",
       "SourceId": "NewsWebAPI",
@@ -49,6 +66,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\resource\\img\\4e7a51f2-dbbd-4bf5-99d5-4ecdbd9a26f9.png"
+    },
+    {
+      "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\53aa9426-0b8a-4b77-a757-8c8d6c125469.jpg",
+      "SourceId": "NewsWebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\",
+      "BasePath": "_content/NewsWebAPI",
+      "RelativePath": "resource/img/53aa9426-0b8a-4b77-a757-8c8d6c125469.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\resource\\img\\53aa9426-0b8a-4b77-a757-8c8d6c125469.jpg"
     }
   ]
 }

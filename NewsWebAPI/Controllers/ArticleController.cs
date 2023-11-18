@@ -87,7 +87,8 @@ namespace NewsWebAPI.Controllers
                         Directory.CreateDirectory(directoryPath);
                     }
                     // Tạo đường dẫn và lưu ảnh vào thư mục
-                    var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
+                    var imageName = Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName);
+                    var imagePath = Path.Combine("resource", "img", imageName);
                     var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
                     using (var stream = new FileStream(physicalPath, FileMode.Create))
@@ -96,7 +97,7 @@ namespace NewsWebAPI.Controllers
                     }
 
                     // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
-                    article.ImagePath = imagePath;
+                    article.ImagePath = imageName;
                 }
 
                 // Xữ lý khi user truyền vào thiếu thông tin (validate form)
@@ -191,7 +192,8 @@ namespace NewsWebAPI.Controllers
                             Directory.CreateDirectory(directoryPath);
                         }
                         // Tạo đường dẫn và lưu ảnh vào thư mục
-                        var imagePath = Path.Combine("resource", "img", Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName));
+                        var imageName = Guid.NewGuid().ToString() + Path.GetExtension(article.Image.FileName);
+                        var imagePath = Path.Combine("resource", "img", imageName);
                         var physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
                         using (var stream = new FileStream(physicalPath, FileMode.Create))
@@ -200,7 +202,7 @@ namespace NewsWebAPI.Controllers
                         }
 
                         // Lưu đường dẫn vào thuộc tính ImagePath của bài viết
-                        article.ImagePath = imagePath;
+                        article.ImagePath = imageName;
                     }
                     findArticleById.Title = article.Title;
                     findArticleById.Description = article.Description;
@@ -267,23 +269,6 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-
-        //[HttpGet("images/{imageName}")]
-        //public IActionResult GetImage(string imageName)
-        //{
-        //    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resource", "img", imageName);
-        //    // Kiểm tra xem ảnh có tồn tại không
-        //    if (System.IO.File.Exists(imagePath))
-        //    {
-        //        // Đọc dữ liệu từ tệp và trả về nó dưới dạng nội dung đáp ứng
-        //        var imageFileStream = System.IO.File.OpenRead(imagePath);
-        //        return File(imageFileStream, "image/jpeg"); // Thay đổi loại MIME tùy thuộc vào loại ảnh bạn đang sử dụng
-        //    }
-
-        //    // Trả về lỗi nếu ảnh không tồn tại
-        //    var response = new MyResponse<string>(false, "Không tìm thấy ảnh với tên " + imageName, "");
-        //    return NotFound(response);
-        //}
 
     }
 }
