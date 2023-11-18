@@ -25,7 +25,7 @@ namespace NewsWebAPI.Controllers
         {
             try
             {
-                List<Category> imgs = await _CategoryRepository.getAll(s,pageNumber, pageSize, sortOrder);
+                List<Category> imgs = await _CategoryRepository.GetAll(s,pageNumber, pageSize, sortOrder);
                 var response = new PaginateResponse<List<Category>>(true, "List category", imgs,pageNumber,pageSize);
                 return Ok(response);
             }

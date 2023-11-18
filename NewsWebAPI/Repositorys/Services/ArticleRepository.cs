@@ -72,5 +72,28 @@ namespace NewsWebAPI.Repositorys.Services
             _context.Articles.Remove(article);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Article>> GetAllArticlesByCategoryID(int id)
+        {
+            return await _context.Articles.Where(a =>  a.CategoryID == id).ToListAsync();
+        }
+
+        //phân trang
+        public async Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize)
+        {
+            return await _context.Articles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize)
+        {
+            return await _context.Articles
+                .Where(a => a.CategoryID == id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

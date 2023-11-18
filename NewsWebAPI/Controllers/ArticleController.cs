@@ -23,13 +23,30 @@ namespace NewsWebAPI.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet] 
-        public async Task<IActionResult> GetAll()
+        //[HttpGet] 
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    try
+        //    {
+        //        List<Article> articles = await _articleRepository.GetAllArticles();
+        //        var response = new MyResponse<List<Article>>(true, "Danh sách bài viết", articles);
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+        //        return BadRequest(response);
+        //    }
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagedArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                List<Article> articles = await _articleRepository.GetAllArticles();
-                var response = new MyResponse<List<Article>>(true, "Danh sách bài viết", articles);
+                List<Article> articleAll = await _articleRepository.GetAllArticles();
+                List<Article> articles = await _articleRepository.GetPagedArticles(pageNumber, pageSize);
+                var response = new PagedResponse<Article>(true, "List of articles", articles, pageNumber, pageSize, articleAll.Count);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -61,6 +78,42 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+
+        //[HttpGet("category/{id}")]
+        //public async Task<IActionResult> GetArticleBysCategoryID([FromRoute] int id)
+        //{
+        //    try
+        //    {
+        //        List<Article> articles = await _articleRepository.GetAllArticlesByCategoryID(id);
+        //        var response = new MyResponse<List<Article>>(true, "Danh sách bài viết với categoryID = " + id, articles);
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+        //        return BadRequest(response);
+        //    }
+        //}
+
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetPagedArticlesByCategoryID([FromRoute] int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                List<Article> articleAllByCategoryID = await _articleRepository.GetAllArticlesByCategoryID(id);
+                List<Article> articles = await _articleRepository.GetPagedArticlesByCategoryID(id, pageNumber, pageSize);
+                var response = new PagedResponse<Article>(true, $"List of articles in category {id}", articles, pageNumber, pageSize, articleAllByCategoryID.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateArticle([FromForm] Article article)
         {

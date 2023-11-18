@@ -6,6 +6,7 @@ namespace NewsWebAPI.Repositorys
     {
         Task<Article> GetArticleById(int id);
         Task<List<Article>> GetAllArticles();
+        Task<List<Article>> GetAllArticlesByCategoryID(int id);
         Task<List<Like>> GetLikesForArticle(int articleId);
         Task<List<Comment>> GetCommentsForArticle(int articleId);
         Task<Comment> GetCommentById(int commentId);
@@ -17,6 +18,8 @@ namespace NewsWebAPI.Repositorys
         Task UpdateArticle(Article article);
         Task DeleteArticle(Article article);
 
+        // Phương thức hỗ trợ phân trang
+        Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize);
+        Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize);
     }
-
 }
