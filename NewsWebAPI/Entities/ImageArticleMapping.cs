@@ -15,7 +15,6 @@ namespace NewsWebAPI.Entities
         public Article? Article { get; set; }
 
         public int ImageID { get; set; }
-        [JsonIgnore]
         public Image? Image { get; set; }
     }
 }

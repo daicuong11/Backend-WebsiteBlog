@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231114181835_update1")]
-    partial class update1
+    [Migration("20231120053121_initdb1")]
+    partial class initdb1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,41 +84,6 @@ namespace NewsWebAPI.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
-                {
-                    b.Property<int>("CommentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"), 1L, 1);
-
-                    b.Property<int>("ArticleID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CommentContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ParentCommentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CommentID");
-
-                    b.HasIndex("ArticleID");
-
-                    b.HasIndex("ParentCommentID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("NewsWebAPI.Entities.Content", b =>
                 {
                     b.Property<int>("ContentID")
@@ -141,8 +106,7 @@ namespace NewsWebAPI.Migrations
 
                     b.HasKey("ContentID");
 
-                    b.HasIndex("ArticleID")
-                        .IsUnique();
+                    b.HasIndex("ArticleID");
 
                     b.ToTable("Contents");
                 });
@@ -189,32 +153,6 @@ namespace NewsWebAPI.Migrations
                     b.HasIndex("ImageID");
 
                     b.ToTable("ImageArticleMappings");
-                });
-
-            modelBuilder.Entity("NewsWebAPI.Entities.Like", b =>
-                {
-                    b.Property<int>("likeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("likeID"), 1L, 1);
-
-                    b.Property<int>("ArticleID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("likeID");
-
-                    b.HasIndex("ArticleID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
@@ -268,36 +206,11 @@ namespace NewsWebAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
-                {
-                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithMany("Comments")
-                        .HasForeignKey("ArticleID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("NewsWebAPI.Entities.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentID");
-
-                    b.HasOne("NewsWebAPI.Entities.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Article");
-
-                    b.Navigation("ParentComment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("NewsWebAPI.Entities.Content", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithOne("Content")
-                        .HasForeignKey("NewsWebAPI.Entities.Content", "ArticleID")
+                        .WithMany("Contents")
+                        .HasForeignKey("ArticleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -323,46 +236,14 @@ namespace NewsWebAPI.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("NewsWebAPI.Entities.Like", b =>
-                {
-                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithMany("Likes")
-                        .HasForeignKey("ArticleID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("NewsWebAPI.Entities.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Article");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Content");
-
-                    b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("NewsWebAPI.Entities.Comment", b =>
-                {
-                    b.Navigation("Replies");
+                    b.Navigation("Contents");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
                     b.Navigation("Articles");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

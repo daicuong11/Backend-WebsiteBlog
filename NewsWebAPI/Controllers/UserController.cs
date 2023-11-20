@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Api;
 using NewsWebAPI.Data;
 using NewsWebAPI.Entities;
 using NewsWebAPI.Enums;
+using NewsWebAPI.Modals;
 using NewsWebAPI.MyExeption;
 using NewsWebAPI.Repositorys;
 
@@ -15,9 +17,12 @@ namespace NewsWebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -61,7 +66,7 @@ namespace NewsWebAPI.Controllers
         }
         
         [HttpPost()]
-        public async Task<ActionResult> Create([FromBody] User user)
+        public async Task<ActionResult> Create([FromBody] UserModal user)
         {
             try
             {
@@ -100,7 +105,7 @@ namespace NewsWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromRoute] int id ,[FromBody] User user)
+        public async Task<ActionResult> Update([FromRoute] int id ,[FromBody] UserModal user)
         {
             try
             {
@@ -126,7 +131,7 @@ namespace NewsWebAPI.Controllers
                 {
                     getUserById.Name = user.Name;
 
-                    await _userRepository.Update(getUserById);
+                    await _userRepository.Update(_mapper.Map<UserModal>(getUserById));
                     var response = new MyResponse<string>(true, "Cập nhật thành công", null);
                     return Ok(response);
                 }
@@ -151,7 +156,7 @@ namespace NewsWebAPI.Controllers
                 User getUserById = await _userRepository.GetById(id);
                 if (getUserById != null)
                 {
-                    await _userRepository.Delete(getUserById);
+                    await _userRepository.Delete(_mapper.Map<UserModal>(getUserById));
                     var response = new MyResponse<string>(true, "Xóa thành công", null);
                     return Ok(response);
                 }

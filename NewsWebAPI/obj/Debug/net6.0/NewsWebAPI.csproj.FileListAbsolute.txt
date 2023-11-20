@@ -133,3 +133,5 @@ D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\obj\D
 D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\obj\Debug\net6.0\NewsWebAPI.genruntimeconfig.cache
 D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\obj\Debug\net6.0\ref\NewsWebAPI.dll
 D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\bin\Debug\net6.0\NewsWebAPI.staticwebassets.runtime.json
+D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\bin\Debug\net6.0\AutoMapper.dll
+D:\Nam_3\HK_1\DotNet\worskpace\Final\Backend\ProjectFinalDotNet\NewsWebAPI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

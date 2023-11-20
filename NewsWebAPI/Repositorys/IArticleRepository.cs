@@ -1,4 +1,5 @@
 ﻿using NewsWebAPI.Entities;
+using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Repositorys
 {
@@ -7,16 +8,10 @@ namespace NewsWebAPI.Repositorys
         Task<Article> GetArticleById(int id);
         Task<List<Article>> GetAllArticles();
         Task<List<Article>> GetAllArticlesByCategoryID(int id);
-        Task<List<Like>> GetLikesForArticle(int articleId);
-        Task<List<Comment>> GetCommentsForArticle(int articleId);
-        Task<Comment> GetCommentById(int commentId);
-        Task<Comment> AddComment(Comment comment);
-        Task<Like> AddLike(Like like);
-
         // Phương thức CRUD cho Article
-        Task<Article> CreateArticle(Article article);
-        Task UpdateArticle(Article article);
-        Task DeleteArticle(Article article);
+        Task<Article> CreateArticle(ArticleModal article);
+        Task UpdateArticle(ArticleModal article);
+        Task DeleteArticle(ArticleModal article);
 
         // Phương thức hỗ trợ phân trang
         Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize);

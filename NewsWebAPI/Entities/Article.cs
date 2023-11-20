@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NewsWebAPI.Modals;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace NewsWebAPI.Entities
 {
-    public record Article
+    public class Article
     {
 
         [Key]
@@ -22,19 +23,11 @@ namespace NewsWebAPI.Entities
         public int? View { get; set; }
         //Khóa ngoại
         public int UserID { get; set; }
-        [JsonIgnore]
-        public User? User { get; set; }
-        [JsonIgnore]
-        public List<Like>? Likes { get; set; }
-        [JsonIgnore]
-        public List<Comment>? Comments { get; set; }
-
+        public User User { get; set; }
         public int CategoryID { get; set; }
-        [JsonIgnore]
-        public Category? Category { get; set; }
+        public Category Category { get; set; }
 
-        [JsonIgnore]
-        public List<Content>? Contents { get; set; }
+        public List<Content> Contents { get; set; }
 
     }
 }

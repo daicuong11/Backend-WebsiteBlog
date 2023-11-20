@@ -19,12 +19,6 @@ builder.Services.AddDbContext<MyDbContext>(x =>
     x.UseSqlServer(connectionString);
 });
 
-//builder.Services.AddControllers().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-//});
-
-
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
@@ -42,13 +36,13 @@ builder.Services.AddCors(options =>
 //Đăng ký repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

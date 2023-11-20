@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NewsWebAPI.Api;
 using NewsWebAPI.Entities;
+using NewsWebAPI.Modals;
 using NewsWebAPI.MyExeption;
 using NewsWebAPI.Repositorys;
 using NewsWebAPI.Repositorys.Services;

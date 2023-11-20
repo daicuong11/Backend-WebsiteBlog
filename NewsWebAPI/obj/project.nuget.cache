@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "8fB9KH48dg92sbg9Fn7Oeo9xcBuyRfbqze4vZfDUwx2G5p2S3XjYF8G6qBjiNv6kT5fznft8NUR/qlSLQOrswQ==",
+  "dgSpecHash": "iXFZ6tOdCK/+l40ZwwvxBW7z1PkzXq4jw+T+twNIyC/LQkorFfwfE35oou0c3yb2pJMnbB6pB1Hh9xP+vk4IfA==",
   "success": true,
   "projectFilePath": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\NewsWebAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lydai\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\lydai\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\lydai\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
-    "C:\\Users\\lydai\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\lydai\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\lydai\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\lydai\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",
     "C:\\Users\\lydai\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.10\\microsoft.entityframeworkcore.6.0.10.nupkg.sha512",
