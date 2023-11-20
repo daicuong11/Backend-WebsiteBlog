@@ -8,9 +8,11 @@ namespace NewsWebAPI.Repositorys
         Task<Article> GetArticleById(int id);
         Task<List<Article>> GetAllArticles();
         Task<List<Article>> GetAllArticlesByCategoryID(int id);
+        Task<List<Article>> GetAllArticlesByUserID(int id);
         // Phương thức CRUD cho Article
         Task<Article> CreateArticle(ArticleModal article);
         Task UpdateArticle(ArticleModal article);
+        Task UpdateArticleStatus(int id, int statusCode);
         Task DeleteArticle(ArticleModal article);
 
         // Phương thức hỗ trợ phân trang

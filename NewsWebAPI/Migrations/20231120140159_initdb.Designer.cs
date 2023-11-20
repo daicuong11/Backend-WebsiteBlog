@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231120053121_initdb1")]
-    partial class initdb1
+    [Migration("20231120140159_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

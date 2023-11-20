@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Data;
 using NewsWebAPI.Entities;
+using NewsWebAPI.Enums;
 using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Repositorys.Services
@@ -35,14 +36,21 @@ namespace NewsWebAPI.Repositorys.Services
         //phân trang
         public async Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize)
         {
-            var articles = await _context.Articles
+            if(pageSize == 0)
+            {
+                return await _context.Articles
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .ToListAsync();
+            }
+            return await _context.Articles
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            return articles;
         }
 
         public async Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize)
@@ -54,6 +62,16 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.Category)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetAllArticlesByUserID(int id)
+        {
+            return await _context.Articles
+                .Where(a => a.UserID == id)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
                 .ToListAsync();
         }
 
@@ -71,6 +89,47 @@ namespace NewsWebAPI.Repositorys.Services
             _context.Articles!.Update(newArticle);
             await _context.SaveChangesAsync();
 
+        }
+
+        public async Task UpdateArticleStatus(int id, int statusCode)
+        {
+            var findArticleByID = await _context.Articles.FindAsync(id);
+            if (findArticleByID != null)
+            {
+                string status;
+                //DRAFT 1
+                //PENDING 2
+                //PUBLISHED 3
+                //DELETED 4
+                //REJECTED 5
+                if (statusCode == 1) 
+                {
+                    status = ArticleStatus.DRAFT.ToString();
+                }
+                else if (statusCode == 2)
+                {
+                    status = ArticleStatus.PENDING.ToString();
+                }
+                else if (statusCode == 3)
+                {
+                    status = ArticleStatus.PUBLISHED.ToString();
+                }
+                else if (statusCode == 4)
+                {
+                    status = ArticleStatus.DELETED.ToString();
+                }
+                else if (statusCode == 5)
+                {
+                    status = ArticleStatus.REJECTED.ToString();
+                }
+                else
+                {
+                    return;
+                }
+                findArticleByID.Status = status;
+                _context.Articles?.Update(findArticleByID);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteArticle(ArticleModal article)

@@ -17,14 +17,16 @@ namespace NewsWebAPI.Controllers
     {
 
         private readonly IUserRepository _userRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly IArticleRepository _articleRepository;
 
         [ActivatorUtilitiesConstructor]
-        public ArticleController(IArticleRepository articleRepository, IUserRepository userRepository, IMapper mapper)
+        public ArticleController(IArticleRepository articleRepository, IUserRepository userRepository, IMapper mapper, ICategoryRepository categoryRepository)
         {
             _articleRepository = articleRepository;
             _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
 
@@ -77,6 +79,22 @@ namespace NewsWebAPI.Controllers
                 List<Article> articleAllByCategoryID = await _articleRepository.GetAllArticlesByCategoryID(id);
                 List<Article> articles = await _articleRepository.GetPagedArticlesByCategoryID(id, pageNumber, pageSize);
                 var response = new PagedResponse<Article>(true, $"List of articles in category {id}", articles, pageNumber, pageSize, articleAllByCategoryID.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetPagedArticlesByUserID([FromRoute] int id)
+        {
+            try
+            {
+                List<Article> articles = await _articleRepository.GetAllArticlesByUserID(id);
+                var response = new MyResponse<List<Article>>(true, $"List of articles in category {id}", articles);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -195,6 +213,32 @@ namespace NewsWebAPI.Controllers
                     var response = new MyResponse<string>(true, "Cập nhật thành công", null);
                     return Ok(response);
                 }
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> UpdateArticleStatus([FromRoute] int id, [FromBody] ArticleStatusModal statusCode)
+        {
+            try
+            {
+                Article findArticleByID = await _articleRepository.GetArticleById(id);
+                if(findArticleByID == null)
+                {
+                    var res = new MyResponse<string>(false, "Không tìm thấy articleID = " + id, "");
+                    return NotFound(res);
+                }
+                else if (statusCode.StatusCode < 1 || statusCode.StatusCode > 5)
+                {
+                    var res = new MyResponse<string>(false, "Không có statusCode = " + statusCode.StatusCode, "");
+                    return NotFound(res);
+                }
+                await _articleRepository.UpdateArticleStatus(id, statusCode.StatusCode);
+                var response = new MyResponse<string>(true, "Sửa thành công trạng thái statusCode = " + statusCode.StatusCode, "");
+                return Ok(response);
             }
             catch (Exception ex)
             {
