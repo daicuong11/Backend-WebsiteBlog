@@ -13,7 +13,6 @@ using NewsWebAPI.Repositorys;
 
 namespace NewsWebAPI.Controllers
 {
-    [Authorize]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -26,7 +25,7 @@ namespace NewsWebAPI.Controllers
             _userRepository = userRepository;
             _mapper = mapper;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -42,7 +41,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById( [FromRoute] int id) 
         {
@@ -108,7 +107,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromRoute] int id ,[FromBody] UserModal user)
         {
@@ -152,7 +151,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete( [FromRoute] int id)
         {
