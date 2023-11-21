@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using NewsWebAPI.Repositorys;
 
 namespace NewsWebAPI.Controllers
 {
+    [Authorize]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -70,7 +72,9 @@ namespace NewsWebAPI.Controllers
         {
             try
             {
-                user.Role = Role.GUEST.ToString();
+                if (user.Role != Role.GUEST.ToString() && user.Role != Role.AUTHOR.ToString() && user.Role != Role.ADMIN.ToString() && user.Role != Role.EDITOR.ToString()) {
+                    return BadRequest(new MyResponse<string>(false, "Sai Role", ""));
+                }
                 //Xữ lý khi user truyền vào thiếu thông tin (validate form)
                 if (!ModelState.IsValid)
                 {
@@ -87,6 +91,7 @@ namespace NewsWebAPI.Controllers
                 User findUserByUsername = await _userRepository.FindByUserName(user.Username);
                 if (findUserByUsername == null)
                 {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                     User newUser = await _userRepository.Create(user);
                     var response = new MyResponse<User>(true, "Thêm thành công", newUser);
                     return StatusCode(201, response);

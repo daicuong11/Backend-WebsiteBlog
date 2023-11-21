@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Entities;
+using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Data
 {
