@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,7 +26,8 @@ namespace NewsWebAPI.Entities
         [MaxLength(100, ErrorMessage = "Mật khẩu không được vượt quá 100 ký tự.")]
         [MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
         public string Password { get; set; }
-
+        [Required(ErrorMessage = "Email là trường bắt buộc.")]
+        public string Email { get; set; }
         public string Role { get; set; }
 
         //Khóa ngoại
