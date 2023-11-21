@@ -1,76 +1,148 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Data;
 using NewsWebAPI.Entities;
+using NewsWebAPI.Enums;
+using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Repositorys.Services
 {
     public class ArticleRepository : IArticleRepository
     {
         private readonly MyDbContext _context;
-        public ArticleRepository(MyDbContext context)
+        private readonly IMapper _mapper;
+
+        public ArticleRepository(MyDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<Comment> AddComment(Comment comment)
-        {
-            var entityEntry = await _context.Comments.AddAsync(comment);
-            await _context.SaveChangesAsync();
-            return entityEntry.Entity;
-        }
-
-        public async Task<Like> AddLike(Like like)
-        {
-            var entityEntry = await _context.Likes.AddAsync(like);
-            await _context.SaveChangesAsync();
-            return entityEntry.Entity;
-        }
-
         public async Task<Article> GetArticleById(int id)
         {
-            return await _context.Articles.FindAsync(id);
+            return await _context.Articles
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .SingleOrDefaultAsync(a => a.ArticleID == id);
         }
 
         public async Task<List<Article>> GetAllArticles()
         {
-            return await _context.Articles.ToListAsync();
-        }
-
-        public async Task<List<Like>> GetLikesForArticle(int articleId)
-        {
-            return await _context.Likes.Where(l => l.ArticleID == articleId).ToListAsync();
-        }
-
-        public async Task<List<Comment>> GetCommentsForArticle(int articleId)
-        {
-            return await _context.Comments
-                .Include(c => c.Replies)
-                .Where(c => c.ArticleID == articleId)
+            return await _context.Articles
+                .Include(a => a.User)
                 .ToListAsync();
         }
 
-        public async Task<Comment> GetCommentById(int commentId)
+        //phân trang
+        public async Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize)
         {
-            return await _context.Comments.FindAsync(commentId);
+            if(pageSize == 0)
+            {
+                return await _context.Articles
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .ToListAsync();
+            }
+            return await _context.Articles
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
-        public async Task<Article> CreateArticle(Article article)
+        public async Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize)
         {
-            var entityEntry = await _context.Articles.AddAsync(article);
+            return await _context.Articles
+                .Where(a => a.CategoryID == id)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetAllArticlesByUserID(int id)
+        {
+            return await _context.Articles
+                .Where(a => a.UserID == id)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .ToListAsync();
+        }
+
+        public async Task<Article> CreateArticle(ArticleModal article)
+        {
+            var newArticle = _mapper.Map<Article>(article);
+            var entityEntry = await _context.Articles.AddAsync(newArticle);
             await _context.SaveChangesAsync();
             return entityEntry.Entity;
         }
 
-        public async Task UpdateArticle(Article article)
+        public async Task UpdateArticle(ArticleModal article)
         {
-            _context.Articles!.Update(article);
+            var newArticle = _mapper.Map<Article>(article);
+            _context.Articles!.Update(newArticle);
             await _context.SaveChangesAsync();
 
         }
 
-        public async Task DeleteArticle(Article article)
+        public async Task UpdateArticleStatus(int id, int statusCode)
         {
-            _context.Articles.Remove(article);
+            var findArticleByID = await _context.Articles.FindAsync(id);
+            if (findArticleByID != null)
+            {
+                string status;
+                //DRAFT 1
+                //PENDING 2
+                //PUBLISHED 3
+                //DELETED 4
+                //REJECTED 5
+                if (statusCode == 1) 
+                {
+                    status = ArticleStatus.DRAFT.ToString();
+                }
+                else if (statusCode == 2)
+                {
+                    status = ArticleStatus.PENDING.ToString();
+                }
+                else if (statusCode == 3)
+                {
+                    status = ArticleStatus.PUBLISHED.ToString();
+                }
+                else if (statusCode == 4)
+                {
+                    status = ArticleStatus.DELETED.ToString();
+                }
+                else if (statusCode == 5)
+                {
+                    status = ArticleStatus.REJECTED.ToString();
+                }
+                else
+                {
+                    return;
+                }
+                findArticleByID.Status = status;
+                _context.Articles?.Update(findArticleByID);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteArticle(ArticleModal article)
+        {
+            var newArticle = _mapper.Map<Article>(article);
+            _context.Articles.Remove(newArticle);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Article>> GetAllArticlesByCategoryID(int id)
+        {
+            return await _context.Articles.Where(a =>  a.CategoryID == id).ToListAsync();
+        }
+
     }
 }

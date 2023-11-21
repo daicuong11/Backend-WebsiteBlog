@@ -33,33 +33,26 @@ namespace NewsWebAPI.Repositorys.Services
 
         }
 
-        public async Task<List<Category>> getAll(string? s,int pageNumber, int pageSize, string sortOrder)
+        public async Task<List<Category>> GetAll(string? searchTerm, int pageNumber, int pageSize, string sortOrder)
         {
-            var query = from q in _context.Categories
-                        select q;
-            if (!String.IsNullOrEmpty(s))
+            var query = _context.Categories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(b => b.CategoryName.Contains(s));
+                query = query.Where(c => c.CategoryName.Contains(searchTerm));
             }
 
-            switch (sortOrder)
+            query = sortOrder switch
             {
-                case "name_desc":
-                    query = query.OrderByDescending(s => s.CategoryName);
-                    break;
-                case "name":
-                    query = query.OrderBy(s => s.CategoryName);
-                    break;
-                case "id_desc":
-                    query = query.OrderByDescending(s => s.CategoryID);
-                    break;
-                default:
-                    query = query.OrderBy(s => s.CategoryID);
-                    break;
-            }
+                "name_desc" => query.OrderByDescending(c => c.CategoryName),
+                "name" => query.OrderBy(c => c.CategoryName),
+                "id_desc" => query.OrderByDescending(c => c.CategoryID),
+                _ => query.OrderBy(c => c.CategoryID),
+            };
 
-            return await query.Skip((pageNumber -1)* pageSize).Take(pageSize).ToListAsync();
+            return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
+
 
         public async Task Update(Category category)
         {

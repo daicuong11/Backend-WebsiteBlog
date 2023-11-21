@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using NewsWebAPI.Enums;
+﻿using NewsWebAPI.Entities;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
-namespace NewsWebAPI.Entities
+namespace NewsWebAPI.Modals
 {
-    [Table("users")]
-    public record User
+    public class UserModal
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
         [Required(ErrorMessage = "Họ và tên là trường bắt buộc.")]
         [MaxLength(100, ErrorMessage = "Tên không được vượt quá 100 ký tự.")]
@@ -26,12 +19,7 @@ namespace NewsWebAPI.Entities
         [MaxLength(100, ErrorMessage = "Mật khẩu không được vượt quá 100 ký tự.")]
         [MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Email là trường bắt buộc.")]
-        public string Email { get; set; }
         public String Role { get; set; }
-        //Khóa ngoại
-        [JsonIgnore]
-        public List<Article> Articles { get; set; }
 
     }
 }
