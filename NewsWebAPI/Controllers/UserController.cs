@@ -25,7 +25,7 @@ namespace NewsWebAPI.Controllers
             _userRepository = userRepository;
             _mapper = mapper;
         }
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -41,7 +41,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById( [FromRoute] int id) 
         {

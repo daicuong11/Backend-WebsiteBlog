@@ -16,6 +16,8 @@ namespace NewsWebAPI.Entities
         [NotMapped]
         public IFormFile ContentImage { get; set; }
         public string? ContentImagePath { get; set; }
+        
+        public int ContentIndex { get; set; }
 
         //khóa ngoại
         public int ArticleID { get; set; }
