@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NewsWebAPI.Api;
 using NewsWebAPI.Data;
+using NewsWebAPI.Helpers;
 using NewsWebAPI.Repositorys;
 using NewsWebAPI.Repositorys.Services;
 using System.Text;
@@ -71,37 +74,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseCors("corspolicy");
-
-
 
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
-
-app.Use(async (context, next) =>
-{
-    // Xác thực người dùng
-    var authenticationResult = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-
-    if (!authenticationResult.Succeeded)
-    {
-        // Không có hoặc token không hợp lệ
-        context.Response.StatusCode = 401;
-        context.Response.ContentType = "application/json";
-
-        var response = new MyResponse<string>(false, "Unauthorized. Token is missing or invalid.", "");
-
-        // Chuyển đổi object response thành dạng JSON và gửi về client
-        var jsonResponse = JsonSerializer.Serialize(response);
-        await context.Response.WriteAsync(jsonResponse, Encoding.UTF8);
-
-        return;
-    }
-
-    // Token hợp lệ, tiếp tục xử lý middleware tiếp theo
-    await next();
-});
 
 
 app.UseAuthentication();
