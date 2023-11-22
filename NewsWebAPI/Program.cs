@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NewsWebAPI.Api;
 using NewsWebAPI.Data;
+using NewsWebAPI.Enums;
 using NewsWebAPI.Helpers;
 using NewsWebAPI.Repositorys;
 using NewsWebAPI.Repositorys.Services;
@@ -27,6 +28,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ADMIN", policy => policy.RequireRole(Role.ADMIN.ToString()));
+    options.AddPolicy("EDITOR", policy => policy.RequireRole(Role.EDITOR.ToString()));
+    options.AddPolicy("AUTHOR", policy => policy.RequireRole(Role.AUTHOR.ToString()));
+    options.AddPolicy("GUEST", policy => policy.RequireRole(Role.GUEST.ToString()));
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();

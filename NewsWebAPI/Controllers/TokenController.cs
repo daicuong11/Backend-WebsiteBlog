@@ -66,8 +66,9 @@ namespace NewsWebAPI.Controllers
                     UserId = userId,
                     Name = name,
                     UserName = userName,
-                    Email = email
-                };
+                    Email = email,
+                    Role = User.FindFirst("Role")?.Value
+            };
 
                 return Ok(new MyResponse<Object>(true, "Thông tin người dùng.", userInfo));
             }
@@ -89,6 +90,7 @@ namespace NewsWebAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
                 new Claim("UserId", user.UserID.ToString()),
                 new Claim("Name", user.Name),
                 new Claim("UserName", user.Username),

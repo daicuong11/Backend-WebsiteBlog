@@ -25,7 +25,7 @@ namespace NewsWebAPI.Controllers
             _userRepository = userRepository;
             _mapper = mapper;
         }
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -41,7 +41,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById( [FromRoute] int id) 
         {
@@ -107,7 +107,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-        [Authorize]
+        [Authorize(Policy = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromRoute] int id ,[FromBody] UserModal user)
         {
@@ -151,7 +151,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-        [Authorize]
+        [Authorize(Policy = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete( [FromRoute] int id)
         {
