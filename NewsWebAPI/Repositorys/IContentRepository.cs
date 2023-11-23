@@ -1,4 +1,5 @@
 ﻿using NewsWebAPI.Entities;
+using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Repositorys
 {
@@ -7,8 +8,8 @@ namespace NewsWebAPI.Repositorys
         Task<List<Content>> GetAllContents();
         Task<List<Content>> GetAllContentByArticleID(int articleId);
         Task<Content> GetContentById(int contentId);
-        Task<Content> CreateContent(Content content);
-        Task UpdateContent(Content content);
+        Task<Content> CreateContent(ContentModal content);
+        Task UpdateContent(ContentModal content);
         Task DeleteContent(Content content);
     }
 }

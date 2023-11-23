@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsWebAPI.Api;
 using NewsWebAPI.Entities;
@@ -16,12 +17,14 @@ namespace NewsWebAPI.Controllers
     {
         private readonly IContentRepository _contentRepository;
         private readonly IArticleRepository _articleRepository;
+        private readonly IMapper _mapper;
 
         [ActivatorUtilitiesConstructor]
-        public ContentController(IContentRepository contentRepository, IArticleRepository articleRepository)
+        public ContentController(IContentRepository contentRepository, IArticleRepository articleRepository, IMapper mapper)
         {
             _contentRepository = contentRepository;
             _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -81,7 +84,7 @@ namespace NewsWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContent([FromForm] Content content)
+        public async Task<IActionResult> CreateContent([FromForm] ContentModal content)
         {
             try
             {
@@ -145,7 +148,7 @@ namespace NewsWebAPI.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateContent([FromRoute] int id, [FromBody] Content content)
+        public async Task<IActionResult> UpdateContent([FromRoute] int id, [FromBody] ContentModal content)
         {
             try
             {
@@ -185,7 +188,7 @@ namespace NewsWebAPI.Controllers
                     findContentById.ContentBody = content.ContentBody;
                     findContentById.ContentImagePath = content.ContentImagePath;
 
-                    await _contentRepository.UpdateContent(findContentById);
+                    await _contentRepository.UpdateContent(_mapper.Map<ContentModal>(findContentById));
                     var response = new MyResponse<string>(true, "Cập nhật nội dung thành công", null);
                     return Ok(response);
                 }

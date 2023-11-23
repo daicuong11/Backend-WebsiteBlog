@@ -1,16 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NewsWebAPI.Data;
 using NewsWebAPI.Entities;
+using NewsWebAPI.Modals;
 
 namespace NewsWebAPI.Repositorys.Services
 {
     public class ContentRepository : IContentRepository
     {
         private readonly MyDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ContentRepository(MyDbContext context)
+        public ContentRepository(MyDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<Content>> GetAllContents()
@@ -30,16 +34,16 @@ namespace NewsWebAPI.Repositorys.Services
             return await _context.Contents.FindAsync(contentId);
         }
 
-        public async Task<Content> CreateContent(Content content)
+        public async Task<Content> CreateContent(ContentModal content)
         {
-            var entityEntry = await _context.Contents.AddAsync(content);
+            var entityEntry = await _context.Contents.AddAsync(_mapper.Map<Content>(content));
             await _context.SaveChangesAsync();
             return entityEntry.Entity;
         }
 
-        public async Task UpdateContent(Content content)
+        public async Task UpdateContent(ContentModal content)
         {
-            _context.Contents.Update(content);
+            _context.Contents.Update(_mapper.Map<Content>(content));
             await _context.SaveChangesAsync();
         }
 

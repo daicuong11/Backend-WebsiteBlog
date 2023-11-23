@@ -1,27 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NewsWebAPI.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
-using System.Text.Json.Serialization;
 
-namespace NewsWebAPI.Entities
+namespace NewsWebAPI.Modals
 {
-    public class Content
+    public class ContentModal
     {
-
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ContentID { get; set; }
         public string? ContentTitle { get; set; }
         public string? ContentBody { get; set; }
         [NotMapped]
-        public IFormFile ContentImage { get; set; }
+        public IFormFile? ContentImage { get; set; }
         public string? ContentImagePath { get; set; }
-        
+
         public int ContentIndex { get; set; }
 
         //khóa ngoại
         public int ArticleID { get; set; }
-        [JsonIgnore]
-        public Article Article { get; set; }
     }
 }

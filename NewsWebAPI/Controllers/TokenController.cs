@@ -34,12 +34,23 @@ namespace NewsWebAPI.Controllers
                 var user = await GetUser(_userData.Username);
                 if (user == null || !BCrypt.Net.BCrypt.Verify(_userData.Password, user.Password))
                 {
-                    return BadRequest(new MyResponse<string>(false, "Sai tên đăng nhập hoặc mật khẩu", ""));
+                    return Ok(new MyResponse<string>(false, "Sai tên tài khoản hoặc mật khẩu", ""));
                 }
 
                 // Tạo token và trả về response thành công
                 var token = GenerateJwtToken(user);
-                return Ok(new MyResponse<string>(true, "Đăng nhập thành công", token));
+                var respone = new
+                {
+                    user = new
+                    {
+                        UserID = user.UserID,
+                        Name = user.Name,
+                        Username = user.Username,
+                        Role = user.Role,
+                    },
+                    token
+                };
+                return Ok(new MyResponse<Object>(true, "Đăng nhập thành công", respone));
             }
             else
             {
@@ -63,9 +74,9 @@ namespace NewsWebAPI.Controllers
                 // Ví dụ: trả về thông tin người dùng dưới dạng JSON
                 var userInfo = new
                 {
-                    UserId = userId,
+                    UserID = userId,
                     Name = name,
-                    UserName = userName,
+                    Username = userName,
                     Email = email,
                     Role = User.FindFirst("Role")?.Value
             };
@@ -94,7 +105,8 @@ namespace NewsWebAPI.Controllers
                 new Claim("UserId", user.UserID.ToString()),
                 new Claim("Name", user.Name),
                 new Claim("UserName", user.Username),
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim("Role", user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "5xfUG/HRlG7Y2ukDCqUGYi/6MdaSUimhhHkEFidor1c=",
+  "Hash": "aIcCS2riR5clu/gcrNUy9U/QaUgnYT4j1qKqyZRV90o=",
   "Source": "NewsWebAPI",
   "BasePath": "_content/NewsWebAPI",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\resource\\img\\0ce16566-6bbf-4cb1-8b8f-9bdff8468c5c.png"
+    },
+    {
+      "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\0fd958e7-dffa-4eaa-a803-2af2668f94bb.jpg",
+      "SourceId": "NewsWebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\",
+      "BasePath": "_content/NewsWebAPI",
+      "RelativePath": "resource/img/0fd958e7-dffa-4eaa-a803-2af2668f94bb.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\resource\\img\\0fd958e7-dffa-4eaa-a803-2af2668f94bb.jpg"
     },
     {
       "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\27bbdae8-2dac-450b-a0de-bacec760be53.jpg",
@@ -170,6 +187,23 @@
       "OriginalItemSpec": "wwwroot\\resource\\img\\8150c718-be4d-48e9-bbfd-075961dab240.jpg"
     },
     {
+      "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\8a894c7b-1514-4aee-884c-202b881399de.jpg",
+      "SourceId": "NewsWebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\",
+      "BasePath": "_content/NewsWebAPI",
+      "RelativePath": "resource/img/8a894c7b-1514-4aee-884c-202b881399de.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\resource\\img\\8a894c7b-1514-4aee-884c-202b881399de.jpg"
+    },
+    {
       "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\9459a081-0929-4ae2-83f0-47ca64105875.png",
       "SourceId": "NewsWebAPI",
       "SourceType": "Discovered",
@@ -185,6 +219,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\resource\\img\\9459a081-0929-4ae2-83f0-47ca64105875.png"
+    },
+    {
+      "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\a9b580f8-6ebd-4858-a5f3-123bd25ae617.png",
+      "SourceId": "NewsWebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\",
+      "BasePath": "_content/NewsWebAPI",
+      "RelativePath": "resource/img/a9b580f8-6ebd-4858-a5f3-123bd25ae617.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\resource\\img\\a9b580f8-6ebd-4858-a5f3-123bd25ae617.png"
     },
     {
       "Identity": "D:\\Nam_3\\HK_1\\DotNet\\worskpace\\Final\\Backend\\ProjectFinalDotNet\\NewsWebAPI\\wwwroot\\resource\\img\\d75adbe8-4cfd-48cd-8bbf-2fbaed57151b.png",

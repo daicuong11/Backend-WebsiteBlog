@@ -10,6 +10,7 @@ namespace NewsWebAPI.Helpers
         {
             CreateMap<Article, ArticleModal>().ReverseMap();
             CreateMap<User, UserModal>().ReverseMap();
+            CreateMap<Content, ContentModal>().ReverseMap();
         }
     }
 }
