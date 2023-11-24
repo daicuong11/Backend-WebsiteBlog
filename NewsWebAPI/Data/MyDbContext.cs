@@ -18,6 +18,9 @@ namespace NewsWebAPI.Data
         public DbSet<ImageArticleMapping> ImageArticleMappings {  get; set; }
 
         public DbSet<Content> Contents { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Love> Loves { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

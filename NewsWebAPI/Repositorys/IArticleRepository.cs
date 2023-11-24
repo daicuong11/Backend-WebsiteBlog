@@ -20,5 +20,9 @@ namespace NewsWebAPI.Repositorys
         Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize);
 
         Task<List<Article>> GetArticlesBySearchKey(string searchKey);
+
+        Task<List<Article>> GetArticlesLatest(int pageNumber, int pageSize);
+        Task<List<Article>> GetArticlesFavourite(int pageNumber, int pageSize);
+        Task<List<Article>> GetRandomArticles(int pageNumber, int pageSize);
     }
 }

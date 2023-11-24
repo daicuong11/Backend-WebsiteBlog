@@ -32,6 +32,8 @@ namespace NewsWebAPI.Entities
         //Khóa ngoại
         [JsonIgnore]
         public List<Article> Articles { get; set; }
+        [JsonIgnore]
+        public List<Notification> Notifications { get; set; }
 
     }
 }

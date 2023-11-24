@@ -20,6 +20,7 @@ namespace NewsWebAPI.Repositorys.Services
         public async Task<Article> GetArticleById(int id)
         {
             return await _context.Articles
+                .Include(a => a.Loves)
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
@@ -39,12 +40,14 @@ namespace NewsWebAPI.Repositorys.Services
             if(pageSize == 0)
             {
                 return await _context.Articles
+                .Include(a => a.Loves)
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
                 .ToListAsync();
             }
             return await _context.Articles
+                .Include(a => a.Loves)
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
@@ -57,6 +60,7 @@ namespace NewsWebAPI.Repositorys.Services
         {
             return await _context.Articles
                 .Where(a => a.CategoryID == id)
+                .Include(a => a.Loves)
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
@@ -69,6 +73,7 @@ namespace NewsWebAPI.Repositorys.Services
         {
             return await _context.Articles
                 .Where(a => a.UserID == id)
+                .Include(a => a.Loves)
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
@@ -148,6 +153,48 @@ namespace NewsWebAPI.Repositorys.Services
         {
             return await _context.Articles
                 .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesLatest(int pageNumber, int pageSize)
+        {
+            return await _context.Articles
+                .Include(a => a.Loves)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .OrderByDescending(a => a.PublishDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesFavourite(int pageNumber, int pageSize)
+        {
+            // Giả sử có một trường trong bảng Article để xác định các bài viết yêu thích, ví dụ: IsFavourite
+            return await _context.Articles
+                .Include(a => a.Loves)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .OrderByDescending(a => a.Loves.Count)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+        public async Task<List<Article>> GetRandomArticles(int pageNumber, int pageSize)
+        {
+            var totalArticles = await _context.Articles.CountAsync();
+
+            // Truy vấn cơ sở dữ liệu để lấy các bài viết với sắp xếp ngẫu nhiên
+            return await _context.Articles
+                .Include(a => a.Loves)
+                .Include(a => a.User)
+                .Include(a => a.Contents)
+                .Include(a => a.Category)
+                .OrderBy(a => Guid.NewGuid())
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 

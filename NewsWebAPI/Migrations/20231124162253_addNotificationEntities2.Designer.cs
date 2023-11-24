@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsWebAPI.Data;
 
@@ -11,9 +12,10 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231124162253_addNotificationEntities2")]
+    partial class addNotificationEntities2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,6 +167,9 @@ namespace NewsWebAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoveID"), 1L, 1);
 
                     b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ArticleTargetID")
                         .HasColumnType("int");
 
                     b.Property<int>("UserTargetID")

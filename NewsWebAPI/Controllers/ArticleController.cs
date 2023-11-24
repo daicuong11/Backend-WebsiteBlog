@@ -104,6 +104,57 @@ namespace NewsWebAPI.Controllers
             }
         }
 
+        [HttpGet("latest")]
+        public async Task<IActionResult> GetArticlesLatest([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                List<Article> articleAll = await _articleRepository.GetAllArticles();
+                List<Article> articles = await _articleRepository.GetArticlesLatest(pageNumber, pageSize);
+                var response = new PagedResponse<Article>(true, "Danh sách bài viết mới nhất", articles, pageNumber, pageSize, articleAll.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("favourite")]
+        public async Task<IActionResult> GetArticlesFavourite([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                List<Article> articleAll = await _articleRepository.GetAllArticles();
+                List<Article> articles = await _articleRepository.GetArticlesFavourite(pageNumber, pageSize);
+                var response = new PagedResponse<Article>(true, "Danh sách bài viết thích nhất", articles, pageNumber, pageSize, articleAll.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("others")]
+        public async Task<IActionResult> GetRandomArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                List<Article> articleAll = await _articleRepository.GetAllArticles();
+                List<Article> articles = await _articleRepository.GetRandomArticles(pageNumber, pageSize);
+                var response = new PagedResponse<Article>(true, "Danh sách bài viết khác", articles, pageNumber, pageSize, articleAll.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("search")]
         public async Task<IActionResult> GetArticlesByKey([FromQuery] string searchKey)
         {
