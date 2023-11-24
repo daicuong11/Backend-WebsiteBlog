@@ -144,5 +144,12 @@ namespace NewsWebAPI.Repositorys.Services
             return await _context.Articles.Where(a =>  a.CategoryID == id).ToListAsync();
         }
 
+        public async Task<List<Article>> GetArticlesBySearchKey(string searchKey)
+        {
+            return await _context.Articles
+                .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
+                .ToListAsync();
+        }
+
     }
 }

@@ -18,5 +18,7 @@ namespace NewsWebAPI.Repositorys
         // Phương thức hỗ trợ phân trang
         Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize);
         Task<List<Article>> GetPagedArticlesByCategoryID(int id, int pageNumber, int pageSize);
+
+        Task<List<Article>> GetArticlesBySearchKey(string searchKey);
     }
 }

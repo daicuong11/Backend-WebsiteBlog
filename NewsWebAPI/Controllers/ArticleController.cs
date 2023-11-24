@@ -104,6 +104,23 @@ namespace NewsWebAPI.Controllers
             }
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> GetArticlesByKey([FromQuery] string searchKey)
+        {
+            try
+            {
+                List<Article> articles = await _articleRepository.GetArticlesBySearchKey(searchKey);
+                var response = new MyResponse<List<Article>>(true, "Danh sách bài viết tìm kiếm", articles);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateArticle([FromForm] ArticleModal article)
