@@ -92,6 +92,16 @@ app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
+//app.Use(async (context, next) =>
+//{
+//    await next();
+
+//    if (context.Response.StatusCode == 401)
+//    {
+//        context.Response.ContentType = "application/json";
+//        await context.Response.WriteAsync(JsonSerializer.Serialize(new MyResponse<string>(false, "Xác thực không thành công", "")));
+//    }
+//});
 
 app.UseAuthentication();
 app.UseAuthorization();

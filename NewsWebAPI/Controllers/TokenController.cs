@@ -68,7 +68,7 @@ namespace NewsWebAPI.Controllers
                 var userId = User.FindFirst("UserId")?.Value;
                 var name = User.FindFirst("Name")?.Value;
                 var userName = User.FindFirst("UserName")?.Value;
-                var email = User.FindFirst("Email")?.Value;
+                //var email = User.FindFirst("Email")?.Value;
 
                 // Bạn có thể xử lý thông tin người dùng ở đây
                 // Ví dụ: trả về thông tin người dùng dưới dạng JSON
@@ -77,7 +77,7 @@ namespace NewsWebAPI.Controllers
                     UserID = userId,
                     Name = name,
                     Username = userName,
-                    Email = email,
+                    //Email = email,
                     Role = User.FindFirst("Role")?.Value
             };
 
@@ -85,7 +85,7 @@ namespace NewsWebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new MyResponse<string>(false, "Lỗi", ""));
+                return BadRequest(new MyResponse<string>(false, ex.Message, ""));
             }
         }
 
@@ -105,7 +105,7 @@ namespace NewsWebAPI.Controllers
                 new Claim("UserId", user.UserID.ToString()),
                 new Claim("Name", user.Name),
                 new Claim("UserName", user.Username),
-                new Claim("Email", user.Email),
+                //new Claim("Email", user.Email),
                 new Claim("Role", user.Role)
             };
 

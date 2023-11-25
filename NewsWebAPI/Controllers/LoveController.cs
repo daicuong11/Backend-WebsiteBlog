@@ -46,10 +46,10 @@ namespace NewsWebAPI.Controllers
                 if(findLove != null)
                 {
                     await _loveRepository.UnLove(findLove.LoveID);
-                    return Ok(new MyResponse<string>(true, "Bỏ thích", ""));
+                    return Ok(new MyResponse<bool>(true, "Bỏ thích", false));
                 }
                 var newLove = await _loveRepository.Create(_mapper.Map<Love>(love));
-                var response = new MyResponse<Love>(true, "Tạo lượt thích thành công", newLove);
+                var response = new MyResponse<bool>(true, "Tạo lượt thích thành công", true);
                 return Ok(response);
             }
             catch (Exception ex)

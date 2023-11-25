@@ -92,7 +92,7 @@ namespace NewsWebAPI.Controllers
                 {
                     user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                     User newUser = await _userRepository.Create(user);
-                    var response = new MyResponse<User>(true, "Thêm thành công", newUser);
+                    var response = new MyResponse<User>(true, "Đăng ký tài khoản thành công", newUser);
                     return StatusCode(201, response);
                 }
                 else
@@ -104,7 +104,7 @@ namespace NewsWebAPI.Controllers
             catch (Exception ex)
             {
                 var response = new MyResponse<string>(false, ex.Message, "");
-                return BadRequest();
+                return BadRequest(response);
             }
         }
         [Authorize(Policy = "ADMIN")]
