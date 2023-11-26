@@ -91,6 +91,7 @@ namespace NewsWebAPI.Controllers
                 if (findUserByUsername == null)
                 {
                     user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                    user.CreateAt = DateTime.Now;
                     User newUser = await _userRepository.Create(user);
                     var response = new MyResponse<User>(true, "Đăng ký tài khoản thành công", newUser);
                     return StatusCode(201, response);

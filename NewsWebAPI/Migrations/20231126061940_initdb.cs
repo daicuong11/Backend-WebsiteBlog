@@ -45,6 +45,8 @@ namespace NewsWebAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -85,6 +87,30 @@ namespace NewsWebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    ArticleTargetID = table.Column<int>(type: "int", nullable: false),
+                    UserTargetID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.NotificationID);
+                    table.ForeignKey(
+                        name: "FK_Notifications_users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contents",
                 columns: table => new
                 {
@@ -93,6 +119,7 @@ namespace NewsWebAPI.Migrations
                     ContentTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContentBody = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContentImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContentIndex = table.Column<int>(type: "int", nullable: false),
                     ArticleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -132,6 +159,26 @@ namespace NewsWebAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Loves",
+                columns: table => new
+                {
+                    LoveID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserTargetID = table.Column<int>(type: "int", nullable: false),
+                    ArticleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Loves", x => x.LoveID);
+                    table.ForeignKey(
+                        name: "FK_Loves_Articles_ArticleID",
+                        column: x => x.ArticleID,
+                        principalTable: "Articles",
+                        principalColumn: "ArticleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_CategoryID",
                 table: "Articles",
@@ -156,6 +203,16 @@ namespace NewsWebAPI.Migrations
                 name: "IX_ImageArticleMappings_ImageID",
                 table: "ImageArticleMappings",
                 column: "ImageID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Loves_ArticleID",
+                table: "Loves",
+                column: "ArticleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserID",
+                table: "Notifications",
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -167,10 +224,16 @@ namespace NewsWebAPI.Migrations
                 name: "ImageArticleMappings");
 
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Loves");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Articles");
 
             migrationBuilder.DropTable(
                 name: "Categories");

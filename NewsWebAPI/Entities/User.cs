@@ -27,6 +27,7 @@ namespace NewsWebAPI.Entities
         [MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
         public string Password { get; set; }
         public string? Email { get; set; }
+        public DateTime? CreateAt { get; set; }
         public String Role { get; set; }
         //Khóa ngoại
         [JsonIgnore]

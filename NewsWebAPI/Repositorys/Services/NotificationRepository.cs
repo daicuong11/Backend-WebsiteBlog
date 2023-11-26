@@ -21,10 +21,21 @@ namespace NewsWebAPI.Repositorys.Services
             return await _context.Notifications.FindAsync(id);
         }
 
+        public async Task<List<Notification>> GetNotifiOfUserCreateID(int id)
+        {
+            return await _context.Notifications
+                .Where(n => n.UserID == id && n.UserTargetID != id)
+                .Include(n => n.UserCreate)
+                .OrderByDescending(n => n.CreatedAt)
+                .Take(10) // Lấy 10 thông báo đầu tiên
+                .ToListAsync();
+        }
+
+
         public async Task<List<Notification>> GetNotifiOfUserTargetID(int id)
         {
             return await _context.Notifications
-                .Where(n => n.UserTargetID == id)
+                .Where(n => n.UserTargetID == id && n.UserID != id)
                 .Include(n => n.UserCreate)
                 .OrderByDescending(n => n.CreatedAt)
                 .ToListAsync();

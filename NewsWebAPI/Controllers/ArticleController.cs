@@ -138,6 +138,22 @@ namespace NewsWebAPI.Controllers
             }
         }
 
+        [HttpGet("favourite/top3")]
+        public async Task<IActionResult> GetArticlesFavourite([FromQuery] int id)
+        {
+            try
+            {
+                List<Article> articles = await _articleRepository.GetTop3ArticlesFavouriteByUserID(id);
+                var response = new MyResponse<List<Article>>(true, "Danh sách top 3 bài viết thích nhất", articles);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("others")]
         public async Task<IActionResult> GetRandomArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {

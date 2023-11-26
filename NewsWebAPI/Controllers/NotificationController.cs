@@ -22,6 +22,22 @@ namespace NewsWebAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("userID")]
+        public async Task<IActionResult> GetNotificationByUserUD([FromQuery] int id)
+        {
+            try
+            {
+                List<Notification> notis = await _notificationRepository.GetNotifiOfUserCreateID(id);
+                var response = new MyResponse<List<Notification>>(true, "Danh hoạt động của bạn", notis);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("target")]
         public async Task<IActionResult> GetNotificationByUserTarget([FromQuery] int id) 
         {

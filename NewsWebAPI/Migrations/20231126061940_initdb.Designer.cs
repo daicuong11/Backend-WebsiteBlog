@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231121135620_updateinitdb")]
-    partial class updateinitdb
+    [Migration("20231126061940_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,6 +101,9 @@ namespace NewsWebAPI.Migrations
                     b.Property<string>("ContentImagePath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ContentIndex")
+                        .HasColumnType("int");
+
                     b.Property<string>("ContentTitle")
                         .HasColumnType("nvarchar(max)");
 
@@ -155,6 +158,61 @@ namespace NewsWebAPI.Migrations
                     b.ToTable("ImageArticleMappings");
                 });
 
+            modelBuilder.Entity("NewsWebAPI.Entities.Love", b =>
+                {
+                    b.Property<int>("LoveID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoveID"), 1L, 1);
+
+                    b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserTargetID")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoveID");
+
+                    b.HasIndex("ArticleID");
+
+                    b.ToTable("Loves");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Notification", b =>
+                {
+                    b.Property<int>("NotificationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationID"), 1L, 1);
+
+                    b.Property<int>("ArticleTargetID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserTargetID")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -163,8 +221,10 @@ namespace NewsWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"), 1L, 1);
 
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -240,14 +300,40 @@ namespace NewsWebAPI.Migrations
                     b.Navigation("Image");
                 });
 
+            modelBuilder.Entity("NewsWebAPI.Entities.Love", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
+                        .WithMany("Loves")
+                        .HasForeignKey("ArticleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("NewsWebAPI.Entities.Notification", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.User", "UserCreate")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserCreate");
+                });
+
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
                     b.Navigation("Contents");
+
+                    b.Navigation("Loves");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
                     b.Navigation("Articles");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

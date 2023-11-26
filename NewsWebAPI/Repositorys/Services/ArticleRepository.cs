@@ -198,5 +198,17 @@ namespace NewsWebAPI.Repositorys.Services
                 .ToListAsync();
         }
 
+        public async Task<List<Article>> GetTop3ArticlesFavouriteByUserID(int id)
+        {
+            return await _context.Articles
+            .Where(a => a.UserID == id)
+            .Include(a => a.Loves)
+            .Include(a => a.User)
+            .Include(a => a.Contents)
+            .Include(a => a.Category)
+            .OrderByDescending(a => a.Loves.Count)
+            .Take(3)
+            .ToListAsync();
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace NewsWebAPI.Repositorys
 
         Task<List<Article>> GetArticlesLatest(int pageNumber, int pageSize);
         Task<List<Article>> GetArticlesFavourite(int pageNumber, int pageSize);
+        Task<List<Article>> GetTop3ArticlesFavouriteByUserID(int id);
         Task<List<Article>> GetRandomArticles(int pageNumber, int pageSize);
     }
 }
