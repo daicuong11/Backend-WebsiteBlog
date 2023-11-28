@@ -29,6 +29,7 @@ namespace NewsWebAPI.Entities
         public string? Email { get; set; }
         public DateTime? CreateAt { get; set; }
         public String Role { get; set; }
+        public bool? IsLocked { get; set; } = true;
         //Khóa ngoại
         [JsonIgnore]
         public List<Article> Articles { get; set; }

@@ -50,10 +50,35 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(u => u.Articles)
                 .ToListAsync();
         }
+        public async Task<List<User>> GetAllPagination(string? searchTerm, int pageNumber, int pageSize, string sortOrder)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(c => c.Username.Contains(searchTerm) || c.Name.Contains(searchTerm) || c.Email.Contains(searchTerm) || c.Role.Contains(searchTerm));
+            }
+
+            query = sortOrder switch
+            {
+                "name_desc" => query.OrderByDescending(c => c.Username),
+                "name" => query.OrderBy(c => c.Username),
+                "id_desc" => query.OrderByDescending(c => c.UserID),
+                _ => query.OrderBy(c => c.UserID),
+            };
+
+            return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).Include(u => u.Articles).ToListAsync();
+        }
+
+        public async Task<int> Count()
+        {
+            return await _context.Users.CountAsync();
+        }
+
 
         public async Task<User> GetById(int id)
         {
-            return await _context.Users
+            return await _context.Users.AsNoTracking()
                 .Include(u => u.Articles)
                 .SingleOrDefaultAsync(u => u.UserID == id);
         }
@@ -64,4 +89,5 @@ namespace NewsWebAPI.Repositorys.Services
             await _context.SaveChangesAsync();
         }
     }
+
 }

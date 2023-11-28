@@ -10,6 +10,7 @@ using NewsWebAPI.Enums;
 using NewsWebAPI.Modals;
 using NewsWebAPI.MyExeption;
 using NewsWebAPI.Repositorys;
+using NewsWebAPI.Repositorys.Services;
 
 namespace NewsWebAPI.Controllers
 {
@@ -33,6 +34,21 @@ namespace NewsWebAPI.Controllers
             {
                 List<User> users = await _userRepository.GetAll();
                 var response = new MyResponse<List<User>>( true, "Danh sách người dùng", users);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, ex.Message, "");
+                return BadRequest();
+            }
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetAllPagination(string? s = "", int pageNumber = 1, int pageSize = 2, string? sortOrder = "id")
+        {
+            try
+            {
+                List<User> users = await _userRepository.GetAllPagination(s, pageNumber, pageSize, (string)sortOrder);
+                var response = new PaginateResponse<List<User>>(true, "Danh sách người dùng", users, pageNumber, pageSize, await _userRepository.Count());
                 return Ok(response);
             }
             catch (Exception ex)
@@ -114,19 +130,6 @@ namespace NewsWebAPI.Controllers
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    var fError = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault();
-                //    if (fError != null)
-                //    {
-                //        var error = fError.ErrorMessage;
-                //        if (String.IsNullOrEmpty(error))
-                //        {
-                //            throw new ValidatorExeption(error);
-                //        }
-                //    }
-                //}
-
                 if (string.IsNullOrEmpty(user.Name))
                 {
                     throw new ValidatorExeption("Tên không được để trống");
@@ -135,7 +138,9 @@ namespace NewsWebAPI.Controllers
                 if (getUserById != null)
                 {
                     getUserById.Name = user.Name;
-
+                    getUserById.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                    getUserById.Role = user.Role;
+                    getUserById.IsLocked = user.IsLocked;
                     await _userRepository.Update(_mapper.Map<UserModal>(getUserById));
                     var response = new MyResponse<string>(true, "Cập nhật thành công", null);
                     return Ok(response);
@@ -175,6 +180,31 @@ namespace NewsWebAPI.Controllers
             {
                 var response = new MyResponse<string>(false, ex.Message, "");
                 return BadRequest();
+            }
+        }
+
+        [HttpPost("lock/{id}")]
+        public async Task<ActionResult> Lock ([FromRoute] int id)
+        {
+            try
+            {
+                User userToLock = await _userRepository.GetById(id);
+                if (userToLock != null)
+                {
+                    userToLock.IsLocked = !userToLock.IsLocked;
+                    await _userRepository.Update(_mapper.Map<UserModal>(userToLock));
+                    var response = new MyResponse<string>(true, $"User has been locked", "");
+                    return Ok(response);
+                } else
+                {
+                    var response = new MyResponse<string>(false, $"User not found", "");
+                    return NotFound(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, ex.Message, "");
+                return BadRequest(response);
             }
         }
     }
