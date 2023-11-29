@@ -23,7 +23,7 @@ namespace NewsWebAPI.Modals
         public string? Email { get; set; }
         public DateTime? CreateAt { get; set; }
 
-        public String Role { get; set; } 
-
+        public String Role { get; set; }
+        public bool? IsLocked { get; set; }
     }
 }
