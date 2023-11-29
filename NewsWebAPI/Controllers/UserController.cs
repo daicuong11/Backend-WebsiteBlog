@@ -81,7 +81,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
-        
+        [Authorize(Roles = "ADMIN")]
         [HttpPost()]
         public async Task<ActionResult> Create([FromBody] UserModal user)
         {

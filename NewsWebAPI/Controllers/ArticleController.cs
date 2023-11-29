@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsWebAPI.Api;
@@ -304,6 +305,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+        [Authorize(Roles = "ADMIN, EDITOR")]    
         [HttpPut("status/{id}")]
         public async Task<IActionResult> UpdateArticleStatus([FromRoute] int id, [FromBody] ArticleStatusModal statusCode)
         {
@@ -330,7 +332,7 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
-
+        [Authorize(Roles = "ADMIN, EDITOR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
