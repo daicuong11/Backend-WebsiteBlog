@@ -48,6 +48,24 @@ namespace NewsWebAPI.Controllers
             }
         }
 
+
+        [HttpGet("all-status")]
+        public async Task<IActionResult> GetPagedArticlesAllStatus([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchKey = "")
+        {
+            try
+            {
+                List<Article> articleAll = await _articleRepository.GetArticlesBySearchKeyAllStatus(searchKey);
+                List<Article> articles = await _articleRepository.GetPagedArticlesAllStatus(pageNumber, pageSize, searchKey);
+                var response = new PagedResponse<Article>(true, "List of articles", articles, pageNumber, pageSize, articleAll.Count);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, "Server error 500", ex.Message);
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {

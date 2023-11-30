@@ -73,6 +73,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<ILoveRepository, LoveRepository>();
+builder.Services.AddScoped<ISaveArticleRepository, SaveArticleRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

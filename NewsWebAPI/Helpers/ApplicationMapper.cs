@@ -13,6 +13,7 @@ namespace NewsWebAPI.Helpers
             CreateMap<Content, ContentModal>().ReverseMap();
             CreateMap<Notification, NotificationModal>().ReverseMap();
             CreateMap<Love, LoveModal>().ReverseMap();
+            CreateMap<SavedArticle, SaveArticleModal>().ReverseMap();
         }
     }
 }

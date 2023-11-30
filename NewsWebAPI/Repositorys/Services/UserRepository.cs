@@ -88,6 +88,12 @@ namespace NewsWebAPI.Repositorys.Services
             _context.Users!.Update(_mapper.Map<User>(user));
             await _context.SaveChangesAsync();
         }
+
+        public async Task ChangePassword(User user)
+        {
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }

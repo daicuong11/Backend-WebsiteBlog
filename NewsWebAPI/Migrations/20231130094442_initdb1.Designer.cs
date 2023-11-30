@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsWebAPI.Data;
 
@@ -11,9 +12,10 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130094442_initdb1")]
+    partial class initdb1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,6 +43,9 @@ namespace NewsWebAPI.Migrations
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("SaveArticleID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -222,15 +227,13 @@ namespace NewsWebAPI.Migrations
                     b.Property<int>("ArticleID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("SavedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("UserTargetID")
                         .HasColumnType("int");
 
                     b.HasKey("SavedArticleID");
 
-                    b.HasIndex("ArticleID");
+                    b.HasIndex("ArticleID")
+                        .IsUnique();
 
                     b.ToTable("SavedArticles");
                 });
@@ -350,8 +353,8 @@ namespace NewsWebAPI.Migrations
             modelBuilder.Entity("NewsWebAPI.Entities.SavedArticle", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithMany("SavedArticles")
-                        .HasForeignKey("ArticleID")
+                        .WithOne("SavedArticle")
+                        .HasForeignKey("NewsWebAPI.Entities.SavedArticle", "ArticleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -364,7 +367,8 @@ namespace NewsWebAPI.Migrations
 
                     b.Navigation("Loves");
 
-                    b.Navigation("SavedArticles");
+                    b.Navigation("SavedArticle")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>

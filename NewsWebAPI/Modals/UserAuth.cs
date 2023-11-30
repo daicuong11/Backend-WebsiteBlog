@@ -17,7 +17,7 @@ namespace NewsWebAPI.Modals
 
         [Required(ErrorMessage = "Mật khẩu là trường bắt buộc.")]
         [MaxLength(100, ErrorMessage = "Mật khẩu không được vượt quá 100 ký tự.")]
-        [MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+        [MinLength(5, ErrorMessage = "Mật khẩu phải có ít nhất 5 ký tự.")]
         public string Password { get; set; }
     }
 }

@@ -81,6 +81,53 @@ namespace NewsWebAPI.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] UserModal user)
+        {
+            try
+            {
+                user.IsLocked = false;
+                user.Role = Role.GUEST.ToString();
+                if (user.Role != Role.GUEST.ToString() && user.Role != Role.AUTHOR.ToString() && user.Role != Role.ADMIN.ToString() && user.Role != Role.EDITOR.ToString())
+                {
+                    return BadRequest(new MyResponse<string>(false, "Sai Role", ""));
+                }
+                //Xữ lý khi user truyền vào thiếu thông tin (validate form)
+                if (!ModelState.IsValid)
+                {
+                    var fError = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault();
+                    if (fError != null)
+                    {
+                        var error = fError.ErrorMessage;
+                        if (String.IsNullOrEmpty(error))
+                        {
+                            throw new ValidatorExeption(error);
+                        }
+                    }
+                }
+                User findUserByUsername = await _userRepository.FindByUserName(user.Username);
+                if (findUserByUsername == null)
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                    user.CreateAt = DateTime.Now;
+                    User newUser = await _userRepository.Create(user);
+                    var response = new MyResponse<User>(true, "Đăng ký tài khoản thành công", newUser);
+                    return StatusCode(201, response);
+                }
+                else
+                {
+                    var response = new MyResponse<User>(false, "Tên tài khoản đã tồn tại", null);
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, ex.Message, "");
+                return BadRequest(response);
+            }
+        }
+
         [Authorize(Roles = "ADMIN")]
         [HttpPost()]
         public async Task<ActionResult> Create([FromBody] UserModal user)
@@ -157,6 +204,34 @@ namespace NewsWebAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpPut("change-password/{id}")]
+        public async Task<ActionResult> ChangePassword([FromRoute] int id ,[FromBody] ChangePasswordModal changePwdModal)
+        {
+            try
+            {
+                   
+                User getUserById = await _userRepository.GetById(id);
+                if (getUserById != null)
+                {
+                    getUserById.Password = BCrypt.Net.BCrypt.HashPassword(changePwdModal.Password);
+                    await _userRepository.Update(_mapper.Map<UserModal>(getUserById));
+                    var response = new MyResponse<string>(true, "Đổi mật khẩu thành công", null);
+                    return Ok(response);
+                }
+                else
+                {
+                    var response = new MyResponse<string>(false, "Hệ thống đang bận, thử lại sau", "");
+                    return NotFound(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                var response = new MyResponse<string>(false, ex.Message, "");
+                return BadRequest(response);
+            }
+        }
+
         [Authorize(Policy = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete( [FromRoute] int id)

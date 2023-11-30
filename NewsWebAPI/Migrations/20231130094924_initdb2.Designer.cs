@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231126112524_dbs")]
-    partial class dbs
+    [Migration("20231130094924_initdb2")]
+    partial class initdb2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,9 @@ namespace NewsWebAPI.Migrations
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("SaveArticleID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -213,6 +216,31 @@ namespace NewsWebAPI.Migrations
                     b.ToTable("Notifications");
                 });
 
+            modelBuilder.Entity("NewsWebAPI.Entities.SavedArticle", b =>
+                {
+                    b.Property<int>("SavedArticleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedArticleID"), 1L, 1);
+
+                    b.Property<int>("ArticleID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SavedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserTargetID")
+                        .HasColumnType("int");
+
+                    b.HasKey("SavedArticleID");
+
+                    b.HasIndex("ArticleID")
+                        .IsUnique();
+
+                    b.ToTable("SavedArticles");
+                });
+
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -227,7 +255,7 @@ namespace NewsWebAPI.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsLocked")
+                    b.Property<bool?>("IsLocked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -325,11 +353,25 @@ namespace NewsWebAPI.Migrations
                     b.Navigation("UserCreate");
                 });
 
+            modelBuilder.Entity("NewsWebAPI.Entities.SavedArticle", b =>
+                {
+                    b.HasOne("NewsWebAPI.Entities.Article", "Article")
+                        .WithOne("SavedArticle")
+                        .HasForeignKey("NewsWebAPI.Entities.SavedArticle", "ArticleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
             modelBuilder.Entity("NewsWebAPI.Entities.Article", b =>
                 {
                     b.Navigation("Contents");
 
                     b.Navigation("Loves");
+
+                    b.Navigation("SavedArticle")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>

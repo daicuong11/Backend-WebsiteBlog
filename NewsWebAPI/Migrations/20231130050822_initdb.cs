@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NewsWebAPI.Migrations
 {
-    public partial class dbs : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,7 +48,7 @@ namespace NewsWebAPI.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsLocked = table.Column<bool>(type: "bit", nullable: false)
+                    IsLocked = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

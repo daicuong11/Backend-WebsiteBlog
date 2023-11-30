@@ -27,14 +27,71 @@ namespace NewsWebAPI.Repositorys.Services
                 .SingleOrDefaultAsync(a => a.ArticleID == id);
         }
 
-        public async Task<List<Article>> GetAllArticles()
+        public async Task<List<Article>> GetAllArticlesAllStatus()
         {
             return await _context.Articles
                 .Include(a => a.User)
                 .ToListAsync();
         }
 
+        public async Task<List<Article>> GetAllArticles()
+        {
+            return await _context.Articles
+                .Include(a => a.User)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
+                .ToListAsync();
+        }
+
         //phân trang
+        public async Task<List<Article>> GetPagedArticlesAllStatus(int pageNumber, int pageSize, string searchKey)
+        {
+            if (string.IsNullOrEmpty(searchKey))
+            {
+                if (pageSize == 0)
+                {
+                    return await _context.Articles
+                    .Include(a => a.Loves)
+                    .Include(a => a.User)
+                    .Include(a => a.Contents)
+                    .Include(a => a.Category)
+                    .OrderByDescending(a => a.PublishDate)
+                    .ToListAsync();
+                }
+                return await _context.Articles
+                    .Include(a => a.Loves)
+                    .Include(a => a.User)
+                    .Include(a => a.Contents)
+                    .Include(a => a.Category)
+                    .OrderByDescending(a => a.PublishDate)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                if (pageSize == 0)
+                {
+                    return await _context.Articles
+                    .Include(a => a.Loves)
+                    .Include(a => a.User)
+                    .Include(a => a.Contents)
+                    .Include(a => a.Category)
+                    .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
+                    .OrderByDescending(a => a.PublishDate)
+                    .ToListAsync();
+                }
+                return await _context.Articles
+                    .Include(a => a.Loves)
+                    .Include(a => a.User)
+                    .Include(a => a.Contents)
+                    .Include(a => a.Category)
+                    .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
+                    .OrderByDescending(a => a.PublishDate)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+        }
         public async Task<List<Article>> GetPagedArticles(int pageNumber, int pageSize)
         {
             if(pageSize == 0)
@@ -44,6 +101,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .ToListAsync();
             }
             return await _context.Articles
@@ -51,6 +109,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -64,6 +123,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -77,6 +137,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .OrderByDescending(a => a.PublishDate)
                 .ToListAsync();
         }
 
@@ -146,10 +207,21 @@ namespace NewsWebAPI.Repositorys.Services
 
         public async Task<List<Article>> GetAllArticlesByCategoryID(int id)
         {
-            return await _context.Articles.Where(a =>  a.CategoryID == id).ToListAsync();
+            return await _context.Articles
+                .Where(a =>  a.CategoryID == id)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
+                .ToListAsync();
         }
 
         public async Task<List<Article>> GetArticlesBySearchKey(string searchKey)
+        {
+            return await _context.Articles
+                .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
+                .ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesBySearchKeyAllStatus(string searchKey)
         {
             return await _context.Articles
                 .Where(article => article.Title.Contains(searchKey) || article.Description.Contains(searchKey))
@@ -163,6 +235,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .OrderByDescending(a => a.PublishDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -177,6 +250,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .OrderByDescending(a => a.Loves.Count)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -192,6 +266,7 @@ namespace NewsWebAPI.Repositorys.Services
                 .Include(a => a.User)
                 .Include(a => a.Contents)
                 .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
                 .OrderBy(a => Guid.NewGuid())
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -206,6 +281,7 @@ namespace NewsWebAPI.Repositorys.Services
             .Include(a => a.User)
             .Include(a => a.Contents)
             .Include(a => a.Category)
+                .Where(a => a.Status == ArticleStatus.PUBLISHED.ToString())
             .OrderByDescending(a => a.Loves.Count)
             .Take(3)
             .ToListAsync();

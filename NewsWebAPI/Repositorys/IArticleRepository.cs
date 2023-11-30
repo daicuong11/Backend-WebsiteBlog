@@ -5,6 +5,9 @@ namespace NewsWebAPI.Repositorys
 {
     public interface IArticleRepository
     {
+        Task<List<Article>> GetAllArticlesAllStatus();
+        Task<List<Article>> GetPagedArticlesAllStatus(int pageNumber, int pageSize, string searchKey);
+        Task<List<Article>> GetArticlesBySearchKeyAllStatus(string searchKey);
         Task<Article> GetArticleById(int id);
         Task<List<Article>> GetAllArticles();
         Task<List<Article>> GetAllArticlesByCategoryID(int id);

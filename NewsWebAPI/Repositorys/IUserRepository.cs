@@ -18,5 +18,7 @@ namespace NewsWebAPI.Repositorys
         Task<User> FindByUserName(string userName);
         Task<User> FindByPassWord(string passWord);
 
+        Task ChangePassword(User user);
+
     }
 }

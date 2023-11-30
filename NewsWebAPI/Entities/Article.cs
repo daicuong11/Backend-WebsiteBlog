@@ -30,6 +30,7 @@ namespace NewsWebAPI.Entities
         public List<Content> Contents { get; set; }
 
         public List<Love> Loves { get; set; }
-
+        [JsonIgnore]
+        public List<SavedArticle> SavedArticles { get; set; }
     }
 }
