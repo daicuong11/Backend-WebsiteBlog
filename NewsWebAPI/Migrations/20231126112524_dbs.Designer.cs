@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231126061940_initdb")]
-    partial class initdb
+    [Migration("20231126112524_dbs")]
+    partial class dbs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -226,6 +226,9 @@ namespace NewsWebAPI.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
