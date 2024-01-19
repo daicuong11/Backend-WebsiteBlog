@@ -54,7 +54,16 @@ namespace NewsWebAPI.Controllers
         {
             try
             {
-                List<Article> articleAll = await _articleRepository.GetArticlesBySearchKeyAllStatus(searchKey);
+                List<Article> articleAll;
+                if (string.IsNullOrEmpty(searchKey))
+                {
+                    articleAll = await _articleRepository.GetAllArticlesAllStatus();
+
+                }
+                else
+                {
+                    articleAll = await _articleRepository.GetPagedArticlesAllStatus(pageNumber, 0, searchKey);
+                }
                 List<Article> articles = await _articleRepository.GetPagedArticlesAllStatus(pageNumber, pageSize, searchKey);
                 var response = new PagedResponse<Article>(true, "List of articles", articles, pageNumber, pageSize, articleAll.Count);
                 return Ok(response);

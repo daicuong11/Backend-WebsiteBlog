@@ -12,8 +12,8 @@ using NewsWebAPI.Data;
 namespace NewsWebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231130094924_initdb2")]
-    partial class initdb2
+    [Migration("20231201002631_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,9 +43,6 @@ namespace NewsWebAPI.Migrations
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("SaveArticleID")
-                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -235,8 +232,7 @@ namespace NewsWebAPI.Migrations
 
                     b.HasKey("SavedArticleID");
 
-                    b.HasIndex("ArticleID")
-                        .IsUnique();
+                    b.HasIndex("ArticleID");
 
                     b.ToTable("SavedArticles");
                 });
@@ -356,8 +352,8 @@ namespace NewsWebAPI.Migrations
             modelBuilder.Entity("NewsWebAPI.Entities.SavedArticle", b =>
                 {
                     b.HasOne("NewsWebAPI.Entities.Article", "Article")
-                        .WithOne("SavedArticle")
-                        .HasForeignKey("NewsWebAPI.Entities.SavedArticle", "ArticleID")
+                        .WithMany("SavedArticles")
+                        .HasForeignKey("ArticleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -370,8 +366,7 @@ namespace NewsWebAPI.Migrations
 
                     b.Navigation("Loves");
 
-                    b.Navigation("SavedArticle")
-                        .IsRequired();
+                    b.Navigation("SavedArticles");
                 });
 
             modelBuilder.Entity("NewsWebAPI.Entities.User", b =>

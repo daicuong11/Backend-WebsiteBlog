@@ -180,6 +180,27 @@ namespace NewsWebAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SavedArticles",
+                columns: table => new
+                {
+                    SavedArticleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SavedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserTargetID = table.Column<int>(type: "int", nullable: false),
+                    ArticleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavedArticles", x => x.SavedArticleID);
+                    table.ForeignKey(
+                        name: "FK_SavedArticles_Articles_ArticleID",
+                        column: x => x.ArticleID,
+                        principalTable: "Articles",
+                        principalColumn: "ArticleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_CategoryID",
                 table: "Articles",
@@ -214,6 +235,11 @@ namespace NewsWebAPI.Migrations
                 name: "IX_Notifications_UserID",
                 table: "Notifications",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SavedArticles_ArticleID",
+                table: "SavedArticles",
+                column: "ArticleID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -229,6 +255,9 @@ namespace NewsWebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "SavedArticles");
 
             migrationBuilder.DropTable(
                 name: "Images");
